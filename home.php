@@ -13,7 +13,7 @@ if(isset($_POST['confirm'])) {
 if(isset($_POST['remove'])) {
     $payroll->deleteEmployee();
 }
-if(!$payroll->TableCreated())
+if(!$payroll->tablesCreated())
     $payroll->createTables();
 ?>
 <!DOCTYPE html>
@@ -46,9 +46,6 @@ if(!$payroll->TableCreated())
                     <button class="nav" id="btn-home">
                         <i class="fa-solid fa-house"></i> Home
                     </button>
-                    <button class="nav" id="btn-option">
-                        <i class="fa-solid fa-gear"></i> Settings
-                    </button>
                     <form action="." method="post" style="display:inline;">
                     <button class="nav" id="btn-logout" name="logout">
                         <i class="fa-solid fa-right-from-bracket"></i> Logout
@@ -58,8 +55,7 @@ if(!$payroll->TableCreated())
             </div>
         </div>
         <div class="body">
-            <form action="." method="post">
-            <div class="content"  style="min-height: 73vh;">
+            <form action="." method="post" class="content" style="min-height: 73vh;">
                 <div class="table">
                     <div class="row title">
                         <div class="tb-name">List of Employee</div>
@@ -82,7 +78,11 @@ if(!$payroll->TableCreated())
                             <div class="col w-50P"><?= $employee['fullname'] ;?></div>
                             <div class="col w-20P"><?= $employee['job_name'] ;?></div>
                             <div class="col w-20P">
-                                <a href="./profile.php?id=<?= $employee['emp_id'] ;?>" class="normal btn-profile"><i class="fa-solid fa-eye"></i> View</a>
+                                <a href="./profile.php?id=<?= $employee['emp_id'] ;?>" class="btn btn-normal">
+                                    <!-- <button class="normal btn-profile" onclick="GoToProf(<?= $employee['emp_id'] ;?>)"> -->
+                                        <i class="fa-solid fa-eye"></i> View
+                                    <!-- </button> -->
+                                </a>
                             </div>
                         </div>
                     <?php
@@ -99,7 +99,6 @@ if(!$payroll->TableCreated())
                         </div>
                     </div>
                 </div>
-            </div>
             </form>
         </div>  
         <div class="footer">
@@ -115,40 +114,51 @@ if(!$payroll->TableCreated())
                 </div>
                 <div class="close" id="btn-modal-close"><i class="fa-solid fa-xmark"></i></div>
             </div>
-            <div class="modal-body">
-                <form action="." method="post">
-                    <input type="text" name="fullname" class="" placeholder="Full Name" />
-                    <input type="number" name="age" class="" placeholder="Age" />
-                    <div class="combo-box">
-                        <select name="gender">
-                            <option selected="true" disabled="disabled">Gender</option>
-                            <option>Male</option>
-                            <option>Female</option>
-                        </select>
-                    </div>
-                    <div class="combo-box">
-                        <select name="job_id" id="">
-                            <option value="0" disabled selected>--JOBS--</option>
-                            <?php
-                                foreach($payroll->fetchJobs() as $job){
-                                    ?>
-                                    <?="sasasa";?>
-                                    <option value="<?= $job['job_id'];?> "> <?= $job['job_name']; ?></option>
-                                    <?php
-                                }
-                            ?>
-                        </select>
-                    </div>
-                    <div style="display:flex; justify-content: space-between; width: 100%;">
-                        <div></div>
-                        <div style="text-align:center ;">
-                            <button id="btn-modal-cancel" class="deny modal-btn">Cancel</button>
-                            <button id="btn-modal-confirm" class="accept modal-btn" name="confirm" >Confirm</button>
+            <form action="." method="post" class="modal-body">
+                <div class="input-tag">
+                    <div class="input-tag-content">
+                        <div class="input-label" style="width: 70px;">Full Name</div>
+                        <div class="input-value">
+                            <input type="text" name="fullname" class="" placeholder="Enter Name" />
                         </div>
                     </div>
-                </form>
-            </div>
-            
+                </div>
+                <div class="input-tag">
+                    <div class="input-tag-content">
+                        <div class="input-label" style="width: 70px;">Age</div>
+                        <div class="input-value">
+                            <input type="number" name="age" class="" placeholder="Enter Age" />
+                        </div>
+                    </div>
+                </div>
+                <div class="combo-box">
+                    <select name="gender">
+                        <option selected="true" disabled="disabled">Gender</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+                <div class="combo-box">
+                    <select name="job_id" id="">
+                        <option value="0" disabled selected>--JOBS--</option>
+                        <?php
+                            foreach($payroll->fetchJobs() as $job){
+                                ?>
+                                
+                                <option value="<?= $job['job_id'];?> "> <?= $job['job_name']; ?></option>
+                                <?php
+                            }
+                        ?>
+                    </select>
+                </div>
+                <div style="display:flex; justify-content: space-between; width: 100%;">
+                    <div></div>
+                    <div style="text-align:center ;">
+                        <button id="btn-modal-cancel" class="deny modal-btn">Cancel</button>
+                        <button id="btn-modal-confirm" class="accept modal-btn" name="confirm" >Confirm</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
     

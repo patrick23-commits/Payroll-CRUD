@@ -5,14 +5,6 @@ $(document).ready(()=>{
         window.location.href = "home.php";
     });
 
-    $("#btn-option").on("click", ()=>{
-        //Open Modal
-    });
-
-    // $("#btn-back").on("click", ()=>{
-    //     window.location.href = "home.html";
-    // });
-
     $(".cb-head").on("change", ()=>{
         if($(".cb-head").prop("checked") == true){
             $('.cb-item').prop('checked', true);
@@ -45,11 +37,11 @@ $(document).ready(()=>{
 
     $("#from_").on("change",(e)=>{
         getWorkingDays(e.target.value, $("#to_").val())
-    })
+    });
 
     $("#to_").on("change",(e)=>{
         getWorkingDays($("#from_").val(), e.target.value)
-    })
+    });
 
     $("#num_days_present").on("keyup", (e)=>{
         if(e.target.value) {
@@ -66,17 +58,16 @@ $(document).ready(()=>{
             alert("Invalid : Days of present must be less or equal to Working Days")
         }
         computeNetPay()
-    })
+    });
     $("#overtime").on("keyup", (e)=>{
         computeNetPay()
-    })
+    });
     $("#undertime").on("keyup", (e)=>{
         computeNetPay()
-    })
+    });
     $("#late").on("keyup", (e)=>{
         computeNetPay()
-    })
-    
+    });
 
     function getWorkingDays(from, to) {
         // CHECK BOTH input[date] if value is valid

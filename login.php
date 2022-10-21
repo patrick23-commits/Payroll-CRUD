@@ -27,7 +27,7 @@
 
       <form id="login" class="input-group" method="post">
         <input type="text" name="username" class="input-field" placeholder="Username" required>
-        <input type="text" name="password" class="input-field" placeholder="Enter Password" required>
+        <input type="password" name="password" class="input-field" placeholder="Enter Password" required>
         <input type="Checkbox" class="check-box">
         <span>Remember Password</span>
        <button type="submit" name="login" class="submit-btn">Login</button>
@@ -35,7 +35,7 @@
       
       <form id="Register" class="input-group" method="post">
         <input type="text" name="username" class="input-field" placeholder="Username" required>
-        <input type="text" name="password" class="input-field" placeholder="Enter Password" required>
+        <input type="password" name="password" class="input-field" placeholder="Enter Password" required>
         <input type="checkbox" class="check-box">
         <span>I agree to the terms & condition</span>
        <button type="submit" name="register" class="submit-btn">Register</button>

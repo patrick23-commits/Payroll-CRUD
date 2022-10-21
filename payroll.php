@@ -4,7 +4,7 @@ class Payroll
     private $username = "";
     private $password = "";
 
-    public function TableCreated(){
+    public function tablesCreated(){
         $tables = ["job", "employee", "attendance", "tax", "salary","payroll"];
         $count = 0;
         $con = $this->connection("root", "");
