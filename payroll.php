@@ -4,6 +4,21 @@ class Payroll
     private $username = "";
     private $password = "";
 
+    public function TableCreated(){
+        $tables = ["job", "employee", "attendance", "tax", "salary","payroll"];
+        $count = 0;
+        $con = $this->connection("root", "");
+        $con->select_db("practice");
+        $res = $con->query("SHOW TABLES");
+        foreach($res as $row)
+            foreach($row as $_t)
+                foreach($tables as $_tb)
+                    if($_t == $_tb) $count++;
+        $con->close();
+
+        return ($count == count($tables))? true : false;
+    }
+    
     public function setUserInfo()
     {
         $this->username = $_POST['username'];
@@ -21,7 +36,7 @@ class Payroll
     {
         $username = $_POST['username'];
         $password = $_POST['password'];
-        $con = $this->connection("root", "12345");
+        $con = $this->connection("root", "");
         $con->select_db("mysql");
         $createUserQuery = "CREATE USER '$username'@'localhost' IDENTIFIED BY '$password';";
         $createUserQuery .= "GRANT ALL PRIVILEGES ON *.* TO '$username'@'localhost' IDENTIFIED BY '$password'";
@@ -56,7 +71,7 @@ class Payroll
         $con->select_db("practice");
         if (!$con->connect_error) {
             $employee = "INSERT INTO employee (`fullname`, `age`, `gender`, `job_id`) VALUES ('$_POST[fullname]', $_POST[age], '$_POST[gender]', $_POST[job_id])";
-            echo var_dump($con->query($employee));
+            // echo var_dump($con->query($employee));
             if ($con->query($employee) === TRUE) {
                 echo "DATA INSERTED";
             }

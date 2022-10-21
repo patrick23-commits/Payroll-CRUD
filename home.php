@@ -13,7 +13,8 @@ if(isset($_POST['confirm'])) {
 if(isset($_POST['remove'])) {
     $payroll->deleteEmployee();
 }
-$payroll->createTables();
+if(!$payroll->TableCreated())
+    $payroll->createTables();
 ?>
 <!DOCTYPE html>
 <html lang="en">
