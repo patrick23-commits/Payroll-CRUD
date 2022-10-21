@@ -119,4 +119,18 @@ $(document).ready(()=>{
         let hourly_rate = parseInt($("#daily_rate").val()) / 8
         return hourly_rate * parseInt($("#overtime").val()) ?  hourly_rate * parseInt($("#overtime").val()) : 0;
     }
+
+    $("#add-employee-form").on("submit",(e)=>{
+        if(!$("#fullname").val() || !$("#age").val() || !$("#gender").val() || !$("#job").val()){
+            alert("Invalid Inputs")
+            e.preventDefault()
+        }
+    })
+
+    $("#save").on("click",(e)=>{
+        if(!$("#net_pay").val()){
+            alert("Data is Not Complete")
+            e.preventDefault();
+        }
+    })
 });

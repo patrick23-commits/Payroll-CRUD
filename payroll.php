@@ -1,14 +1,34 @@
 <?php
 class Payroll
 {
+    private $DB_NAME = "payroll_crud";
     private $username = "";
     private $password = "";
 
+    public function createDatabase() {
+        $isDatabaseExist = FALSE;
+        $con = $this->connection("root","");
+        $databases = "SHOW DATABASES";
+        $result = $con->query($databases);
+        while($row = $result->fetch_assoc()) {
+            if($row['Database'] == $this->DB_NAME) {
+                $isDatabaseExist = true;
+                break;
+            }
+        }
+        if($isDatabaseExist == FALSE) {
+            $query = "CREATE DATABASE $this->DB_NAME";
+            if($con->query($query)) {
+                echo "DATABASE CREATED";
+            }
+        }
+        $con->close();
+    }
     public function tablesCreated(){
         $tables = ["job", "employee", "attendance", "tax", "salary","payroll"];
         $count = 0;
         $con = $this->connection("root", "");
-        $con->select_db("practice");
+        $con->select_db($this->DB_NAME);
         $res = $con->query("SHOW TABLES");
         foreach($res as $row)
             foreach($row as $_t)
@@ -68,7 +88,7 @@ class Payroll
     public function addEmployee()
     {
         $con = $this->connection($_SESSION['username'], $_SESSION['password']);
-        $con->select_db("practice");
+        $con->select_db($this->DB_NAME);
         if (!$con->connect_error) {
             $employee = "INSERT INTO employee (`fullname`, `age`, `gender`, `job_id`) VALUES ('$_POST[fullname]', $_POST[age], '$_POST[gender]', $_POST[job_id])";
             // echo var_dump($con->query($employee));
@@ -84,7 +104,7 @@ class Payroll
     {
         $employees = array();
         $con = $this->connection($_SESSION['username'], $_SESSION['password']);
-        $con->select_db("practice");
+        $con->select_db($this->DB_NAME);
         if (!$con->connect_error) {
             $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
                                     JOIN job
@@ -102,7 +122,7 @@ class Payroll
     public function fetchEmployee($emp_id)
     {
         $con = $this->connection($_SESSION['username'], $_SESSION['password']);
-        $con->select_db("practice");
+        $con->select_db($this->DB_NAME);
         if (!$con->connect_error) {
             $fetchEmployeeQuery = "SELECT employee.emp_id,employee.fullname, employee.age,employee.gender,
                                     job.job_name, job.salary_range
@@ -118,7 +138,7 @@ class Payroll
 
     public function fetchTax() {
         $con = $this->connection($_SESSION['username'], $_SESSION['password']);
-        $con->select_db("practice");
+        $con->select_db($this->DB_NAME);
         if (!$con->connect_error) {
             $fetchTaxQuery = "SELECT * FROM tax";
             $result = $con->query($fetchTaxQuery);
@@ -130,7 +150,7 @@ class Payroll
     public function createTables()
     {
         $con = $this->connection($_SESSION['username'], $_SESSION['password']);
-        $con->select_db("practice");
+        $con->select_db($this->DB_NAME);
         $createTableJobQuery = "CREATE TABLE job (
                                 job_id int PRIMARY KEY AUTO_INCREMENT,
                                 job_name varchar(25) UNIQUE,
@@ -207,7 +227,7 @@ class Payroll
         
         $jobs = array(array('Web Developer', 1000), array('Data Scientist',1500), array('Mobile Developer',1250), array('Penetration Tester',1500), array('Game Developer',1000));
         $con = $this->connection($_SESSION['username'], $_SESSION['password']);
-        $con->select_db("practice");
+        $con->select_db($this->DB_NAME);
         foreach($jobs as $job){
             $insertDepartmentQuery = "INSERT INTO job (job_name, salary_range) VALUES ('$job[0]', '$job[1]')";
             if($con->query($insertDepartmentQuery)===TRUE) {
@@ -233,7 +253,7 @@ class Payroll
     public function fetchJobs() {
         $jobs = array();
         $con = $this->connection($_SESSION['username'], $_SESSION['password']);
-        $con->select_db("practice");
+        $con->select_db($this->DB_NAME);
 
         $fetchJobsQuery = "SELECT * FROM job";
         $result = $con->query($fetchJobsQuery);
@@ -246,8 +266,9 @@ class Payroll
 
     public function insertPayroll() {
         $con = $this->connection($_SESSION['username'], $_SESSION['password']);
-        $con->select_db("practice");
+        $con->select_db($this->DB_NAME);
         $emp_id = $_POST['emp_id'];
+        echo "INSERTING";
         if(!$this->doesHaveExistingPayroll($emp_id, $_POST['from_'], $_POST['to_'])) {
             $insertAttendanceQuery = "INSERT INTO attendance (emp_id, num_of_days_present,late,undertime,overtime, from_, to_) VALUES ('$emp_id', '$_POST[num_days_present]', '$_POST[late]', '$_POST[undertime]','$_POST[overtime]',DATE('$_POST[from_]'),DATE('$_POST[to_]'))";
             $con->query($insertAttendanceQuery);
@@ -276,7 +297,7 @@ class Payroll
     
     public function doesHaveExistingPayroll($emp_id, $from_, $to_) {
         $con = $this->connection($_SESSION['username'], $_SESSION['password']);
-        $con->select_db("practice");
+        $con->select_db($this->DB_NAME);
         $query = "SELECT * FROM payroll WHERE emp_id='$emp_id' AND from_=DATE('$from_') AND to_=DATE('$to_')";
        
         return $con->query($query)->num_rows ? TRUE : FALSE;
@@ -289,7 +310,7 @@ class Payroll
         $gender = $_POST['gender'];
 
         $con = $this->connection($_SESSION['username'], $_SESSION['password']);
-        $con->select_db("practice");
+        $con->select_db($this->DB_NAME);
         $employee = $this->fetchEmployee($emp_id);    
         if($fullname != $employee['fullname'] || $age != $employee['age'] || $gender != $employee['gender']) {
             $query = "UPDATE employee SET fullname='$fullname', age='$age', gender='$gender' WHERE emp_id = '$emp_id'";
@@ -302,7 +323,7 @@ class Payroll
 
     public function deleteEmployee() {
         $con = $this->connection($_SESSION['username'], $_SESSION['password']);
-        $con->select_db("practice");
+        $con->select_db($this->DB_NAME);
         foreach($_POST['emp_id'] as $id) {
             $deletePayrollQuery = "DELETE FROM payroll WHERE emp_id = '$id'";
             $con->query($deletePayrollQuery);

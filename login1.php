@@ -1,5 +1,10 @@
 <?php
-    require_once("./payroll.php");
+$con = new mysqli("localhost", "root", "");
+echo var_dump($con);
+
+$databases = "SHOW DATABASES";
+echo var_dump($con->query($databases)->fetch_assoc());
+$con->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">

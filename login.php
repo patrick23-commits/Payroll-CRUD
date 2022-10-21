@@ -5,7 +5,6 @@
     if(isset($_SESSION['username']) && isset($_SESSION['password'])) {
         header("location:home.php");
     }
-    
 
 ?>
 <!DOCTYPE html>
@@ -27,7 +26,7 @@
 
       <form id="login" class="input-group" method="post">
         <input type="text" name="username" class="input-field" placeholder="Username" required>
-        <input type="password" name="password" class="input-field" placeholder="Enter Password" required>
+        <input type="password" name="password" class="input-field" placeholder="Enter Password">
         <input type="Checkbox" class="check-box">
         <span>Remember Password</span>
        <button type="submit" name="login" class="submit-btn">Login</button>

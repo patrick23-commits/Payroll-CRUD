@@ -3,7 +3,8 @@ session_start();
 require_once("./payroll.php");
 if(!(isset($_SESSION['username']) && isset($_SESSION['password']))) {
     header("location:login.php");
-}
+} 
+$payroll->createDatabase();
 if(isset($_POST['logout'])) {
     $payroll->logout();
 }
@@ -15,6 +16,7 @@ if(isset($_POST['remove'])) {
 }
 if(!$payroll->tablesCreated())
     $payroll->createTables();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -114,12 +116,12 @@ if(!$payroll->tablesCreated())
                 </div>
                 <div class="close" id="btn-modal-close"><i class="fa-solid fa-xmark"></i></div>
             </div>
-            <form action="." method="post" class="modal-body">
+            <form id="add-employee-form" action="." method="post" class="modal-body">
                 <div class="input-tag">
                     <div class="input-tag-content">
                         <div class="input-label" style="width: 70px;">Full Name</div>
                         <div class="input-value">
-                            <input type="text" name="fullname" class="" placeholder="Enter Name" />
+                            <input type="text" id="fullname" name="fullname" class="" placeholder="Enter Name" />
                         </div>
                     </div>
                 </div>
@@ -127,19 +129,19 @@ if(!$payroll->tablesCreated())
                     <div class="input-tag-content">
                         <div class="input-label" style="width: 70px;">Age</div>
                         <div class="input-value">
-                            <input type="number" name="age" class="" placeholder="Enter Age" />
+                            <input type="number" id="age" name="age" class="" placeholder="Enter Age" />
                         </div>
                     </div>
                 </div>
                 <div class="combo-box">
-                    <select name="gender">
+                    <select name="gender" id="gender">
                         <option selected="true" disabled="disabled">Gender</option>
                         <option>Male</option>
                         <option>Female</option>
                     </select>
                 </div>
                 <div class="combo-box">
-                    <select name="job_id" id="">
+                    <select name="job_id" id="job">
                         <option value="0" disabled selected>--JOBS--</option>
                         <?php
                             foreach($payroll->fetchJobs() as $job){

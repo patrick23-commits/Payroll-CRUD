@@ -54,7 +54,7 @@ $tax = $payroll->fetchTax();
             </div>
         </div>
         <div class="body" style="min-height: 80vh;">
-            <form action="./profile.php?id=<?= $_GET['id'] ;?>" method="post">
+            <form id="payroll-form" action="./profile.php?id=<?= $_GET['id'] ;?>" method="post">
                 <div class="p-content">
                     <div class="p-row">
                         <div class="p-col"> 
@@ -235,7 +235,7 @@ $tax = $payroll->fetchTax();
                     </div>
                     <div class="p-row">
                         <button type="button" class="normal" id="btn-profile-back"><i class="fa-solid fa-arrow-left"></i> Back</button>
-                        <button class="accept" name="save" id="btn-profile-save"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                        <button id="save" class="accept" name="save" id="btn-profile-save"><i class="fa-solid fa-floppy-disk"></i> Save</button>
                     </div>
                 </div>
             </form>
@@ -244,12 +244,7 @@ $tax = $payroll->fetchTax();
             Payroll System | 2022 | <i class="fa-regular fa-copyright"></i> All rights reserved
         </div>
     </div>
-    <?php
-        if(isset($_POST['save'])) {
-            $payroll->insertPayroll();
-        }
-        
-    ?>
+    
 </body>
 </html>
 
@@ -258,3 +253,9 @@ $tax = $payroll->fetchTax();
 <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script src="script.js"></script>
+<?php
+        if(isset($_POST['save'])) {
+            $payroll->insertPayroll();
+        }
+        
+?>
