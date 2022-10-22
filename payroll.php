@@ -112,13 +112,13 @@ class Payroll
         $con = $this->connection($_SESSION['username'], $_SESSION['password']);
         $con->select_db($this->DB_NAME);
         if (!$con->connect_error) {
-            if($_SERVER['REQUEST_METHOD'] == "GET" || !isset($_POST['search_name']) || isset($_POST['confirm'])) {
+            if($_SERVER['REQUEST_METHOD'] == "GET" || isset($_POST['remove']) || isset($_POST['confirm'])) {
                 $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
                 LEFT JOIN job
                 ON employee.job_id = job.job_id
                 ORDER BY employee.fullname ASC";
             } else {
-                if(isset($_POST['search_name'])){
+                if(isset($_POST['search'])){
                     $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
                     JOIN job
                     ON employee.job_id = job.job_id
@@ -134,10 +134,10 @@ class Payroll
                 }
                 
             } else {
-                if($_SERVER['REQUEST_METHOD'] == "GET") {
+                if($_SERVER['REQUEST_METHOD'] == "GET" || ($_SERVER['REQUEST_METHOD'] == "POST" && $result->num_rows == 0 && !isset($_POST['search']))) {
                     echo "<h1>No Employee!!</h1>";
                 } else {
-                    if(isset($_POST['search_name']))
+                    if(isset($_POST['search']))
                         echo "<h1>No result for Employee $_POST[search_name]</h1>";     
                 }
                 
