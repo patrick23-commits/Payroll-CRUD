@@ -106,7 +106,7 @@ $tax = $payroll->fetchTax();
                                     <div class="input-tag-content">
                                         <div class="input-label w-80P">Job Department</div>
                                         <div class="input-value">
-                                            <input type="text" name="job_name" placeholder="Job Department" value="<?= $employee["job_name"];?>"> 
+                                            <input type="text" name="job_name" tabindex="-1" readonly placeholder="Job Department" value="<?= $employee["job_name"];?>"> 
                                         </div>
                                     </div>
                                 </div>
@@ -114,7 +114,7 @@ $tax = $payroll->fetchTax();
                                     <div class="input-tag-content">
                                         <div class="input-label w-80P">Salary Range</div>
                                         <div class="input-value">
-                                            <input type="text" id="daily_rate" placeholder="Salary Range" value="<?= $employee["salary_range"];?>"> 
+                                            <input type="text" id="daily_rate" tabindex="-1" readonly placeholder="Salary Range" value="<?= $employee["salary_range"];?>"> 
                                         </div>
                                     </div>
                                 </div>
@@ -129,7 +129,7 @@ $tax = $payroll->fetchTax();
                                     <div class="input-tag-content">
                                         <div class="input-label w-50P">SSS</div>
                                         <div class="input-value">
-                                            <input type="text" name="sss" id="sss" readonly placeholder="SSS" value="<?= $tax['sss'] ;?>"> 
+                                            <input type="text" name="sss" tabindex="-1" id="sss" readonly placeholder="SSS" value="<?= $tax['sss'] ;?>"> 
                                         </div>
                                     </div>
                                 </div>
@@ -137,7 +137,7 @@ $tax = $payroll->fetchTax();
                                     <div class="input-tag-content">
                                         <div class="input-label w-50P">PAGIBIG</div>
                                         <div class="input-value">
-                                            <input type="text" name="pagibig" id="pagibig" readonly placeholder="PAGIBIG" value="<?= $tax['pagibig'] ;?>">  
+                                            <input type="text" name="pagibig" tabindex="-1" id="pagibig" readonly placeholder="PAGIBIG" value="<?= $tax['pagibig'] ;?>">  
                                         </div>
                                     </div>
                                 </div>
@@ -145,7 +145,7 @@ $tax = $payroll->fetchTax();
                                     <div class="input-tag-content">
                                         <div class="input-label w-50P">PhilHealth</div>
                                         <div class="input-value">
-                                            <input type="text" name="philhealth" id="philhealth" readonly placeholder="PhilHealth " value="<?= $tax['philhealth'] ;?>"> 
+                                            <input type="text" name="philhealth" tabindex="-1" id="philhealth" readonly placeholder="PhilHealth " value="<?= $tax['philhealth'] ;?>"> 
                                         </div>
                                     </div>
                                 </div>
@@ -199,7 +199,7 @@ $tax = $payroll->fetchTax();
                                     <div class="input-tag-content">
                                         <div class="input-label w-50P">Gross Pay</div>
                                         <div class="input-value">
-                                            <input type="text" name="gross_pay" id="gross_pay" placeholder="Gross Pay" readonly>
+                                            <input type="text" name="gross_pay" tabindex="-1" id="gross_pay" placeholder="Gross Pay" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -207,7 +207,7 @@ $tax = $payroll->fetchTax();
                                     <div class="input-tag-content">
                                         <div class="input-label w-50P">Net Pay</div>
                                         <div class="input-value">
-                                            <input type="text" name="net_pay" id="net_pay" placeholder="Net Pay" readonly>
+                                            <input type="text" name="net_pay" tabindex="-1" id="net_pay" placeholder="Net Pay" readonly>
                                         </div>
                                     </div>
                                 </div>

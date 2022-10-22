@@ -7,7 +7,7 @@ class Payroll
 
     public function createDatabase() {
         $isDatabaseExist = FALSE;
-        $con = $this->connection("root","");
+        $con = $this->connection('root',"");
         $databases = "SHOW DATABASES";
         $result = $con->query($databases);
         while($row = $result->fetch_assoc()) {
@@ -87,17 +87,22 @@ class Payroll
     }
     public function addEmployee()
     {
+        echo "KO";
         $con = $this->connection($_SESSION['username'], $_SESSION['password']);
         $con->select_db($this->DB_NAME);
         if (!$con->connect_error) {
             $employee = "INSERT INTO employee (`fullname`, `age`, `gender`, `job_id`) VALUES ('$_POST[fullname]', $_POST[age], '$_POST[gender]', $_POST[job_id])";
             // echo var_dump($con->query($employee));
             if ($con->query($employee) === TRUE) {
-                echo "DATA INSERTED";
+                echo "<script> alert('$_POST[fullname] added.') 
+                        window.location.href = 'https://localhost/CRUD' 
+                        </script>";
+            } else {
+                echo "POTTTTTT";
+                echo "<script> alert('$_POST[fullname] is already exist.') </script>";
             }
         }
         $con->close();
-        header("location:home.php");
     }
 
     public function fetchAllEmployees()
@@ -107,34 +112,40 @@ class Payroll
         $con = $this->connection($_SESSION['username'], $_SESSION['password']);
         $con->select_db($this->DB_NAME);
         if (!$con->connect_error) {
-            if($_SERVER['REQUEST_METHOD'] == "GET") {
+            if($_SERVER['REQUEST_METHOD'] == "GET" || !isset($_POST['search_name']) || isset($_POST['confirm'])) {
                 $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
-                JOIN job
+                LEFT JOIN job
                 ON employee.job_id = job.job_id
                 ORDER BY employee.fullname ASC";
             } else {
-                $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
-                JOIN job
-                ON employee.job_id = job.job_id
-                WHERE employee.fullname LIKE '%".$_POST['search_name']."%'";
+                if(isset($_POST['search_name'])){
+                    $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
+                    JOIN job
+                    ON employee.job_id = job.job_id
+                    WHERE employee.fullname LIKE '%".$_POST['search_name']."%'
+                    ORDER BY employee.fullname ASC";
+                }
             }
-            
+
             $result = $con->query($fetchEmployeesQuery);
             if($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     array_push($employees, $row);
                 }
+                
             } else {
                 if($_SERVER['REQUEST_METHOD'] == "GET") {
                     echo "<h1>No Employee!!</h1>";
                 } else {
-                    echo "<h1>No result for Employee $_POST[search_name]</h1>";     
+                    if(isset($_POST['search_name']))
+                        echo "<h1>No result for Employee $_POST[search_name]</h1>";     
                 }
                 
             }
             
-            $con->close();
+            
         }
+        $con->close();
         return $employees;
     }
 
@@ -179,7 +190,7 @@ class Payroll
         $con->query($createTableJobQuery);                    
         $createTableEmployeeQuery = "CREATE TABLE employee (
             emp_id int PRIMARY KEY AUTO_INCREMENT,
-            fullname varchar(25) NOT NULL UNIQUE,
+            fullname varchar(50) NOT NULL UNIQUE,
             age int NOT NULL,
             gender varchar(6) NOT NULL,
             job_id int NOT NULL,
@@ -343,19 +354,21 @@ class Payroll
     public function deleteEmployee() {
         $con = $this->connection($_SESSION['username'], $_SESSION['password']);
         $con->select_db($this->DB_NAME);
-        foreach($_POST['emp_id'] as $id) {
-            $deletePayrollQuery = "DELETE FROM payroll WHERE emp_id = '$id'";
-            $con->query($deletePayrollQuery);
-            $deleteAttendanceQuery = "DELETE FROM attendance WHERE emp_id = '$id'";
-            $con->query($deleteAttendanceQuery);
-            
-            $deleteSalaryQuery = "DELETE FROM salary WHERE emp_id = '$id' ";
-            $con->query($deleteSalaryQuery);
-    
-            $deleteEmployeeQuery = "DELETE FROM employee WHERE emp_id = '$id' ";
-            $con->query($deleteEmployeeQuery);
+        if(isset($_POST['emp_id'])) {
+            foreach($_POST['emp_id'] as $id) {
+                $deletePayrollQuery = "DELETE FROM payroll WHERE emp_id = '$id'";
+                $con->query($deletePayrollQuery);
+                $deleteAttendanceQuery = "DELETE FROM attendance WHERE emp_id = '$id'";
+                $con->query($deleteAttendanceQuery);
+                
+                $deleteSalaryQuery = "DELETE FROM salary WHERE emp_id = '$id' ";
+                $con->query($deleteSalaryQuery);
+        
+                $deleteEmployeeQuery = "DELETE FROM employee WHERE emp_id = '$id' ";
+                $con->query($deleteEmployeeQuery);
+            }
         }
-        header("location:home.php");
+        
     }
 }
 $payroll = new Payroll();

@@ -8,15 +8,12 @@ $payroll->createDatabase();
 if(isset($_POST['logout'])) {
     $payroll->logout();
 }
-if(isset($_POST['confirm'])) {
-    $payroll->addEmployee();
-}
+
 if(isset($_POST['remove'])) {
     $payroll->deleteEmployee();
 }
 if(!$payroll->tablesCreated())
     $payroll->createTables();
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,8 +59,8 @@ if(!$payroll->tablesCreated())
                     <div class="row title">
                         <div class="tb-name">List of Employee</div>
                         <div class="search">
-                            <input type="search" name="search_name" value="<?= isset($_POST['search_name']) ? $_POST['search_name'] : NULL ;?>" style="margin: 10px 0; margin-left: 20px;" placeholder="Search">
-                            <button class="btn-search-go" name="search"><i class="fa-solid fa-magnifying-glass"></i></button>
+                            <input type="search" id="name_search" name="search_name" value="<?= isset($_POST['search_name']) ? $_POST['search_name'] : NULL ;?>" style="margin: 10px 0; margin-left: 20px;" placeholder="Search">
+                            <button class="btn-search-go" id="search" name="search"><i class="fa-solid fa-magnifying-glass"></i></button>
                         </div>
                     </div>
                     <div class="row head">
@@ -76,7 +73,7 @@ if(!$payroll->tablesCreated())
                         foreach($payroll->fetchAllEmployees() as $employee) {
                     ?>
                         <div class="row">
-                            <div class="col w-5P"><input type="checkbox" name="emp_id[]"class="cb-item" value="<?=$employee['emp_id'];?>"></div>
+                            <div class="col w-5P"><input type="checkbox" name="emp_id[]"class="cb-item check-id" value="<?=$employee['emp_id'];?>"></div>
                             <div class="col w-50P"><?= $employee['fullname'] ;?></div>
                             <div class="col w-20P"><?= $employee['job_name'] ;?></div>
                             <div class="col w-20P">
@@ -94,7 +91,7 @@ if(!$payroll->tablesCreated())
                     
                     <div class="row footer">
                         <div>
-                            <button class="deny" name="remove"><i class="fa-solid fa-trash-can"></i> Remove Selected</button>
+                            <button class="deny" name="remove" id="remove"><i class="fa-solid fa-trash-can"></i> Remove Selected</button>
                         </div>
                         <div>
                             <button type="button" class="accept" id="btn-add-employee"><i class="fa-solid fa-plus"></i> Add New Employee</button>
@@ -156,14 +153,19 @@ if(!$payroll->tablesCreated())
                 <div style="display:flex; justify-content: space-between; width: 100%;">
                     <div></div>
                     <div style="text-align:center ;">
-                        <button id="btn-modal-cancel" class="deny modal-btn">Cancel</button>
+                        <button type="button" id="btn-modal-cancel" class="deny modal-btn">Cancel</button>
                         <button id="btn-modal-confirm" class="accept modal-btn" name="confirm" >Confirm</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    
+    <?php 
+
+if(isset($_POST['confirm'])) {
+    $payroll->addEmployee();
+}
+    ?>
 </body>
 </html>
 

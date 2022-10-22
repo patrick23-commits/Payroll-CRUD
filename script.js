@@ -78,11 +78,19 @@ $(document).ready(()=>{
             let setFrom = new Date(from)
             let setTo = new Date(to)
 
-            let timeDiff = Math.abs(setTo.getTime() - setFrom.getTime());
-            let working_days = Math.ceil(timeDiff / (1000 * 3600 * 24)) - 1;
-            console.log(("#working_days").innerText)
-            $("#working_days").text(working_days)
-            computeGrossPay(working_days)
+            let timeDiff = setTo.getTime() - setFrom.getTime();
+            let number_of_rest_day = (timeDiff / (1000 * 3600 * 24)  + 1) / 15 * 2;
+            let working_days = Math.ceil((timeDiff / (1000 * 3600 * 24)  + 1) - number_of_rest_day);
+            if(working_days== 13 || working_days == 26 || working_days == 27) {
+                $("#working_days").text(working_days)
+                computeGrossPay(working_days)
+            } else {
+                alert("This System Computes the payroll by EVERY 15 DAYS  OR BY EVERY 30 DAYS OR BY EVERY 31 DAYS")
+                $("#working_days").text("0")
+                $("#num_days_present").val("")
+                $("#net_pay").val("")
+            }
+            
         }
     }
 
@@ -135,4 +143,24 @@ $(document).ready(()=>{
             e.preventDefault();
         }
     })
+
+    $("#search").on("click",(e)=>{
+        if(!$("#name_search").val()){
+            e.preventDefault()
+        }
+    })
+
+    $("#remove").on("click", (e)=>{
+        let submit = false;
+        $(".check-id").each((index)=>{
+            if($('.check-id')[index].checked) {
+                submit = true
+                return false
+            }
+        })
+        if(submit == false) {
+            e.preventDefault()
+        } 
+    }) 
+
 });
