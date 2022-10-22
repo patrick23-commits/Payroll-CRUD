@@ -62,8 +62,8 @@ if(!$payroll->tablesCreated())
                     <div class="row title">
                         <div class="tb-name">List of Employee</div>
                         <div class="search">
-                            <input type="search" style="margin: 10px 0; margin-left: 20px;" placeholder="Search">
-                            <button class="btn-search-go"><i class="fa-solid fa-magnifying-glass"></i></button>
+                            <input type="search" name="search_name" value="<?= isset($_POST['search_name']) ? $_POST['search_name'] : NULL ;?>" style="margin: 10px 0; margin-left: 20px;" placeholder="Search">
+                            <button class="btn-search-go" name="search"><i class="fa-solid fa-magnifying-glass"></i></button>
                         </div>
                     </div>
                     <div class="row head">

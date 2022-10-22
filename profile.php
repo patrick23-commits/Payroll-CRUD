@@ -1,6 +1,8 @@
 <?php
 session_start();
 require_once("./payroll.php");
+$rand = floor(microtime(true) * 1000);
+$_SESSION['sec'] = floor(microtime(true) * 1000);
 $GLOBALS['employee'] = $payroll->fetchEmployee($_GET['id']);
 if(!(isset($_SESSION['username']) && isset($_SESSION['password']))) {
     header("location:login.php");
@@ -55,6 +57,7 @@ $tax = $payroll->fetchTax();
         </div>
         <div class="body" style="min-height: 80vh;">
             <form id="payroll-form" action="./profile.php?id=<?= $_GET['id'] ;?>" method="post">
+            
                 <div class="p-content">
                     <div class="p-row">
                         <div class="p-col"> 
@@ -101,10 +104,9 @@ $tax = $payroll->fetchTax();
                             <div class="g-content" style="display:flex; flex-direction: column;">
                                 <div class="input-tag">
                                     <div class="input-tag-content">
-                                        <div class="input-label w-80P">Job</div>
+                                        <div class="input-label w-80P">Job Department</div>
                                         <div class="input-value">
                                             <input type="text" name="job_name" placeholder="Job Department" value="<?= $employee["job_name"];?>"> 
-                                
                                         </div>
                                     </div>
                                 </div>
@@ -244,7 +246,11 @@ $tax = $payroll->fetchTax();
             Payroll System | 2022 | <i class="fa-regular fa-copyright"></i> All rights reserved
         </div>
     </div>
-    
+    <?php
+    if(isset($_POST['save'])){
+        $payroll->insertPayroll();
+    } 
+    ?>    
 </body>
 </html>
 
@@ -253,9 +259,3 @@ $tax = $payroll->fetchTax();
 <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script src="script.js"></script>
-<?php
-        if(isset($_POST['save'])) {
-            $payroll->insertPayroll();
-        }
-        
-?>

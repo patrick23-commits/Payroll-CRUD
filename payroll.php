@@ -102,18 +102,37 @@ class Payroll
 
     public function fetchAllEmployees()
     {
+        $fetchEmployeesQuery = "";
         $employees = array();
         $con = $this->connection($_SESSION['username'], $_SESSION['password']);
         $con->select_db($this->DB_NAME);
         if (!$con->connect_error) {
-            $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
-                                    JOIN job
-                                    ON employee.job_id = job.job_id
-                                    ORDER BY employee.fullname ASC";
-            $result = $con->query($fetchEmployeesQuery);
-            while ($row = $result->fetch_assoc()) {
-                array_push($employees, $row);
+            if($_SERVER['REQUEST_METHOD'] == "GET") {
+                $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
+                JOIN job
+                ON employee.job_id = job.job_id
+                ORDER BY employee.fullname ASC";
+            } else {
+                $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
+                JOIN job
+                ON employee.job_id = job.job_id
+                WHERE employee.fullname LIKE '%".$_POST['search_name']."%'";
             }
+            
+            $result = $con->query($fetchEmployeesQuery);
+            if($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    array_push($employees, $row);
+                }
+            } else {
+                if($_SERVER['REQUEST_METHOD'] == "GET") {
+                    echo "<h1>No Employee!!</h1>";
+                } else {
+                    echo "<h1>No result for Employee $_POST[search_name]</h1>";     
+                }
+                
+            }
+            
             $con->close();
         }
         return $employees;

@@ -1,5 +1,7 @@
 $(document).ready(()=>{
-    
+    if(window.history.replaceState){
+        window.history.replaceState(null, null, window.location.href)
+    }
 
     $("#btn-home").on("click", ()=>{
         window.location.href = "home.php";
