@@ -4,7 +4,7 @@ require_once("./payroll.php");
 if(!(isset($_SESSION['username']) && isset($_SESSION['password']))) {
     header("location:login.php");
 } 
-$payroll->createDatabase();
+
 if(isset($_POST['logout'])) {
     $payroll->logout();
 }
@@ -12,8 +12,15 @@ if(isset($_POST['logout'])) {
 if(isset($_POST['remove'])) {
     $payroll->deleteEmployee();
 }
-if(!$payroll->tablesCreated())
+if(!$payroll->tablesCreated()){
     $payroll->createTables();
+    echo "<script>
+        alert('TABLES employee, salary, attendance, tax, job and payroll CREATED!!');
+    </script>";
+}
+if(isset($_POST['confirm'])) {
+    $payroll->addEmployee();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -162,9 +169,7 @@ if(!$payroll->tablesCreated())
     </div>
     <?php 
 
-if(isset($_POST['confirm'])) {
-    $payroll->addEmployee();
-}
+
     ?>
 </body>
 </html>

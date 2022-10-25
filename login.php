@@ -5,7 +5,12 @@
     if(isset($_SESSION['username']) && isset($_SESSION['password'])) {
         header("location:home.php");
     }
-
+    if(isset($_POST['login'])) {
+      $payroll->setUserInfo();
+    }
+    if(isset($_POST['register'])) {
+      echo $payroll->createUser();
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +39,7 @@
       
       <form id="Register" class="input-group" method="post">
         <input type="text" name="username" class="input-field" placeholder="Username" required>
-        <input type="password" name="password" class="input-field" placeholder="Enter Password" required>
+        <input type="password" name="password" class="input-field" placeholder="Enter Password">
         <input type="checkbox" class="check-box">
         <span>I agree to the terms & condition</span>
        <button type="submit" name="register" class="submit-btn">Register</button>
@@ -62,12 +67,4 @@
 </body>
 
 </html>
-<?php
-if(isset($_POST['login'])) {
-  $payroll->setUserInfo();
-  $payroll->login($_POST['username'], $_POST['password']);
-}
-if(isset($_POST['register'])) {
-  echo $payroll->createUser();
-}
-  ?>
+
