@@ -346,7 +346,7 @@ class Payroll
         $t = "";
         $con = $this->connection($_SESSION['username'], $_SESSION['password']);
         $con->select_db($this->DB_NAME);
-        $query = "SELECT * FROM payroll WHERE emp_id='$emp_id' AND from_ BETWEEN DATE('$from_') AND DATE('$to_') AND to_ BETWEEN DATE('$from_') AND DATE('$to_')";
+        $query = "SELECT * FROM payroll WHERE emp_id='$emp_id' AND (from_ BETWEEN DATE('$from_') AND DATE('$to_') OR to_ BETWEEN DATE('$from_') AND DATE('$to_'))";
         $result =  $con->query($query);
         while ($row = $result->fetch_assoc()) {
             $f = $row['from_'];

@@ -79,8 +79,10 @@ $(document).ready(()=>{
             let setTo = new Date(to)
 
             let timeDiff = setTo.getTime() - setFrom.getTime();
-            let number_of_rest_day = (timeDiff / (1000 * 3600 * 24)  + 1) / 15 * 2;
+            let number_of_rest_day = Math.ceil(((timeDiff / (1000 * 3600 * 24)  + 1) / 15) * 2);
+            number_of_rest_day == 5 ? number_of_rest_day -= 1 : null 
             let working_days = Math.ceil((timeDiff / (1000 * 3600 * 24)  + 1) - number_of_rest_day);
+            console.log(Math.ceil((timeDiff / (1000 * 3600 * 24)  + 1)) + " " + number_of_rest_day)
             if(working_days== 13 || working_days == 26 || working_days == 27) {
                 $("#working_days").text(working_days)
                 computeGrossPay(working_days)
@@ -89,6 +91,8 @@ $(document).ready(()=>{
                 $("#working_days").text("0")
                 $("#num_days_present").val("")
                 $("#net_pay").val("")
+                $("#to_").val("")
+                $("#from_").val("")
             }
             
         }
