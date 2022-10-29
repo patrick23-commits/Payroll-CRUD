@@ -53,13 +53,12 @@ class Payroll
     public function connection($username, $password)
     {
         $con = new mysqli("localhost", $username, $password);
-        if($con->connect_error) {
+        if ($con->connect_error) {
             echo "<script>alert('USER NOT FOUND!!')
             window.location.href = window.location.href;
             </script>";
             die();
-            
-        } 
+        }
         return $con;
     }
     public function createUser()
@@ -79,20 +78,20 @@ class Payroll
     {
         $con = $this->connection($username, $password);
         $databaseMessage = $this->createDatabase();
-    
+
         $_SESSION['username'] = $this->username;
         $_SESSION['password'] = $this->password;
 
         $script = "<script> 
                     alert('$_SESSION[username] connected successfuly!');\n";
-        if($databaseMessage) {
-            $script .= "alert(' ". $databaseMessage."')\n";
-        }    
-        $script .= "window.location.href = 'https://localhost/Payroll-CRUD/home.php';
+        if ($databaseMessage) {
+            $script .= "alert(' " . $databaseMessage . "')\n";
+        }
+        $script .= "window.location.href = 'https://localhost' + window.location.pathname;
         </script>";
 
         echo $script;
-        
+
         $con->close();
     }
 
@@ -109,13 +108,14 @@ class Payroll
         if (!$con->connect_error) {
             $employee = "INSERT INTO employee (`fullname`, `age`, `gender`, `job_id`) VALUES ('$_POST[fullname]', $_POST[age], '$_POST[gender]', $_POST[job_id])";
             if ($con->query($employee) === TRUE) {
-                echo "<script> alert('$_POST[fullname] added.') 
-                        window.location.href = 'https://localhost/Payroll-CRUD' 
+                echo "<script> 
+                        window.location.href = 'https://localhost' + window.location.pathname ;
+                        alert('$_POST[fullname] added.') 
                         </script>";
             } else {
                 echo "<script> 
+                        window.location.href = 'https://localhost'  + window.location.pathname ;
                         alert('$_POST[fullname] is already exist.');
-                        window.location.href = 'https://localhost/Payroll-CRUD' ;
                     </script>";
             }
         }
