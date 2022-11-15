@@ -99,7 +99,7 @@ class Payroll
     {
         $_SESSION['username'] = null;
         $_SESSION['password'] = null;
-        header("location:login.php");
+        header("location:login-form.php");
     }
     public function addEmployee()
     {

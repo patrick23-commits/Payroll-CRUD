@@ -107,6 +107,7 @@ form.sign-in-form {
   font-weight: 600;
   margin: 10px 0;
   transition: .5s;
+  font-size: 1.05rem;
 }
 .btn:hover {
   background-color: #4d84e2;
@@ -146,11 +147,11 @@ form.sign-in-form {
   position: absolute;
   top: 125px;
   bottom: 0;
-  left: 170px;
+  left: 140px;
   right: 0;
   font-weight: 600;
   line-height: 1;
-  font-size: 2rem;
+  font-size: 3rem;
 }
 .panel p{
   font-size: 0.95rem;
