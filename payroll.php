@@ -137,7 +137,7 @@ class Payroll
             } else {
                 if (isset($_POST['search'])) {
                     $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
-                    JOIN job
+                    JOIN job    
                     ON employee.job_id = job.job_id
                     WHERE employee.fullname LIKE '%" . $_POST['search_name'] . "%'
                     ORDER BY employee.fullname ASC";
@@ -154,7 +154,7 @@ class Payroll
                     echo "<h1>No Employee!!</h1>";
                 } else {
                     if (isset($_POST['search']))
-                        echo "<h1>No result for Employee $_POST[search_name]</h1>";
+                        echo "<h1>No result for Employee '$_POST[search_name]'</h1>";
                 }
             }
         }
@@ -195,6 +195,12 @@ class Payroll
     {
         $con = $this->connection($_SESSION['username'], $_SESSION['password']);
         $con->select_db($this->DB_NAME);
+        $createAccount = "CREATE TABLE accounts (account_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                            email TEXT NOT NULL,
+                            password TEXT NOT NULL
+                        )";
+
+                        
         $createTableJobQuery = "CREATE TABLE job (
                                 job_id int PRIMARY KEY AUTO_INCREMENT,
                                 job_name varchar(25) UNIQUE,
@@ -379,18 +385,17 @@ class Payroll
         $con = $this->connection($_SESSION['username'], $_SESSION['password']);
         $con->select_db($this->DB_NAME);
         if (isset($_POST['emp_id'])) {
-            foreach ($_POST['emp_id'] as $id) {
-                $deletePayrollQuery = "DELETE FROM payroll WHERE emp_id = '$id'";
-                $con->query($deletePayrollQuery);
-                $deleteAttendanceQuery = "DELETE FROM attendance WHERE emp_id = '$id'";
-                $con->query($deleteAttendanceQuery);
+            $id = join(", ", $_POST['emp_id']);
+            $deletePayrollQuery = "DELETE FROM payroll WHERE emp_id IN ($id)";
+            $con->query($deletePayrollQuery);
+            $deleteAttendanceQuery = "DELETE FROM attendance WHERE emp_id IN ($id)";
+            $con->query($deleteAttendanceQuery);
 
-                $deleteSalaryQuery = "DELETE FROM salary WHERE emp_id = '$id' ";
-                $con->query($deleteSalaryQuery);
+            $deleteSalaryQuery = "DELETE FROM salary WHERE emp_id IN ($id) ";
+            $con->query($deleteSalaryQuery);
 
-                $deleteEmployeeQuery = "DELETE FROM employee WHERE emp_id = '$id' ";
-                $con->query($deleteEmployeeQuery);
-            }
+            $deleteEmployeeQuery = "DELETE FROM employee WHERE emp_id IN ($id) ";
+            $con->query($deleteEmployeeQuery);
             header("location:home.php");
         }
     }
