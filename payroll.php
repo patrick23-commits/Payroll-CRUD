@@ -52,36 +52,48 @@ class Payroll
     }
     public function connection($username, $password)
     {
+    
         $con = new mysqli("localhost", $username, $password);
         if ($con->connect_error) {
-            echo "<script>alert('USER NOT FOUND!!')
-            window.location.href = window.location.href;
-            </script>";
-            die();
+            exit();
         }
         return $con;
     }
     public function createUser()
     {
-        $username = $_POST['username'];
-        $password = $_POST['password'];
+        
         $con = $this->connection("root", "");
         $con->select_db("mysql");
-        $createUserQuery = "CREATE USER '$username'@'localhost' IDENTIFIED BY '$password';";
-        $createUserQuery .= "GRANT ALL PRIVILEGES ON *.* TO '$username'@'localhost' IDENTIFIED BY '$password'";
+        $createUserQuery = "CREATE USER 'crud'@'localhost' IDENTIFIED BY 'crud';";
+        $createUserQuery .= "GRANT ALL PRIVILEGES ON *.* TO 'crud'@'localhost' IDENTIFIED BY 'crud'";
         $user = $con->multi_query($createUserQuery);
         $con->close();
-        return $user ?  "<script>alert('$username CREATED SUCCESSFULY')</script>" : "<script>alert('USER  $username IS ALREADY REGISTERED')</script>";
+        return $user ?  "<script>alert('CRUD CREATED SUCCESSFULY')</script>" : null;//"<script>alert('USER  CRUD IS ALREADY REGISTERED')</script>";
     }
 
     public function login($username, $password)
-    {
-        $con = $this->connection($username, $password);
+    {   
+       
+        $con = $this->connection("root", "");
+        $con->select_db("payroll_crud");
         $databaseMessage = $this->createDatabase();
-
+        $selectAccount = "SELECT * FROM (
+                        SELECT email,password,status from admin_account
+                        UNION ALL
+                        SELECT email, password, status FROM employee_account
+                    ) as tb1
+                        WHERE email = '$username' AND password = PASSWORD('$password')";
+        $result = $con->query($selectAccount);
+        if($result->num_rows <= 0) {
+            header("Location:login-form.php?error=user not found"); 
+            exit();
+        }
+    
         $_SESSION['username'] = $this->username;
         $_SESSION['password'] = $this->password;
-
+        $_SESSION['status'] = $result->fetch_assoc()["status"];
+       
+        
         $script = "<script> 
                     alert('$_SESSION[username] connected successfuly!');\n";
         if ($databaseMessage) {
@@ -126,7 +138,7 @@ class Payroll
     {
         $fetchEmployeesQuery = "";
         $employees = array();
-        $con = $this->connection($_SESSION['username'], $_SESSION['password']);
+        $con = $this->connection("root","");
         $con->select_db($this->DB_NAME);
         if (!$con->connect_error) {
             if ($_SERVER['REQUEST_METHOD'] == "GET") {
@@ -193,14 +205,17 @@ class Payroll
 
     public function createTables()
     {
-        $con = $this->connection($_SESSION['username'], $_SESSION['password']);
+        $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
-        $createAccount = "CREATE TABLE accounts (account_id INTEGER PRIMARY KEY AUTO_INCREMENT,
-                            email TEXT NOT NULL,
-                            password TEXT NOT NULL
-                        )";
 
-                        
+        $createAdminAccount = "CREATE TABLE admin_account (account_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                            email TEXT NOT NULL UNIQUE,
+                            password TEXT NOT NULL,
+                            status CHAR
+                        )";
+        $con->query($createAdminAccount);
+
+        
         $createTableJobQuery = "CREATE TABLE job (
                                 job_id int PRIMARY KEY AUTO_INCREMENT,
                                 job_name varchar(25) UNIQUE,
@@ -208,15 +223,27 @@ class Payroll
                             );";
 
         $con->query($createTableJobQuery);
+
         $createTableEmployeeQuery = "CREATE TABLE employee (
             emp_id int PRIMARY KEY AUTO_INCREMENT,
             fullname varchar(50) NOT NULL UNIQUE,
-            age int NOT NULL,
+            age INT NOT NULL,
             gender varchar(6) NOT NULL,
-            job_id int NOT NULL,
+            job_id INT NOT NULL,
             FOREIGN KEY(job_id) REFERENCES job(job_id)
         );";
         $con->query($createTableEmployeeQuery);
+
+
+        $createEmployeeAccount = "CREATE TABLE employee_account (account_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                            emp_id INT NOT NULL,
+                            email TEXT NOT NULL,
+                            password TEXT NOT NULL,
+                            status CHAR,
+                            FOREIGN KEY(emp_id) REFERENCES employee(emp_id)
+                        )";
+        $con->query($createEmployeeAccount);
+
 
         $createTableAttendanceQuery = "CREATE TABLE attendance (
             attendance_id int PRIMARY KEY AUTO_INCREMENT,
@@ -271,13 +298,23 @@ class Payroll
         $con->query($createTablePayrollQuery);
 
         $this->insertDepartmentAndDeduction();
+        
     }
 
+    public function insertAdmin() {
+        $con = $this->connection("root", "");
+        $con->select_db("payroll_crud");
+
+        $insertAdminQuery = "INSERT INTO admin_account (`email`,`password`,`status`) VALUES ('admin', PASSWORD('admin'), 'A')";
+        $con->query($insertAdminQuery);
+        
+        $con->close();
+    }
     public function insertDepartmentAndDeduction()
     {
 
         $jobs = array(array('Web Developer', 1000), array('Data Scientist', 1500), array('Mobile Developer', 1250), array('Penetration Tester', 1500), array('Game Developer', 1000));
-        $con = $this->connection($_SESSION['username'], $_SESSION['password']);
+        $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
         foreach ($jobs as $job) {
             $insertDepartmentQuery = "INSERT INTO job (job_name, salary_range) VALUES ('$job[0]', '$job[1]')";
@@ -301,7 +338,7 @@ class Payroll
     public function fetchJobs()
     {
         $jobs = array();
-        $con = $this->connection($_SESSION['username'], $_SESSION['password']);
+        $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
 
         $fetchJobsQuery = "SELECT * FROM job";
@@ -316,7 +353,7 @@ class Payroll
     public function insertPayroll()
     {
 
-        $con = $this->connection($_SESSION['username'], $_SESSION['password']);
+        $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
         $emp_id = $_POST['emp_id'];
         $doesHaveExistingPayroll = $this->doesHaveExistingPayroll($emp_id, $_POST['from_'], $_POST['to_']);
@@ -350,7 +387,7 @@ class Payroll
     {
         $f = "";
         $t = "";
-        $con = $this->connection($_SESSION['username'], $_SESSION['password']);
+        $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
         $query = "SELECT * FROM payroll WHERE emp_id='$emp_id' AND (from_ BETWEEN DATE('$from_') AND DATE('$to_') OR to_ BETWEEN DATE('$from_') AND DATE('$to_'))";
         $result =  $con->query($query);
@@ -368,7 +405,7 @@ class Payroll
         $age = $_POST['age'];
         $gender = $_POST['gender'];
 
-        $con = $this->connection($_SESSION['username'], $_SESSION['password']);
+        $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
         $employee = $this->fetchEmployee($emp_id);
         if ($fullname != $employee['fullname'] || $age != $employee['age'] || $gender != $employee['gender']) {
@@ -382,7 +419,7 @@ class Payroll
 
     public function deleteEmployee()
     {
-        $con = $this->connection($_SESSION['username'], $_SESSION['password']);
+        $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
         if (isset($_POST['emp_id'])) {
             $id = join(", ", $_POST['emp_id']);
