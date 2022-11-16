@@ -5,6 +5,8 @@ if(!(isset($_SESSION['username']) && isset($_SESSION['password']))) {
     header("location:login.php");
 } 
 
+
+
 if(isset($_POST['logout'])) {
     $payroll->logout();
 }
@@ -38,7 +40,12 @@ if(isset($_POST['confirm'])) {
 
 </head>
 <body>
-    
+    <?php
+$payroll->insertAdmin();
+?>
+<h1>
+    <?=$_SESSION['status'];?>
+</h1>
     <div class="container">
         <div class="header">
             <div class="navigator">
