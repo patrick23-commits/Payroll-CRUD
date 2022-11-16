@@ -3,13 +3,14 @@
     session_start();
     error_reporting(0);
     if(isset($_SESSION['username']) && isset($_SESSION['password'])) {
-        header("location:home.php");
+      if($_SESSION['status'] === "A")
+          header("location:home.php");
+      else
+        null;
     }
     if(isset($_POST['login'])) {
-      $payroll->setUserInfo();
-    }
-    if(isset($_POST['register'])) {
       echo $payroll->createUser();
+      $payroll->setUserInfo();
     }
 ?>
 <!DOCTYPE html>
@@ -27,6 +28,13 @@
   <title>Login</title>
 </head>
 <body>
+  <?php 
+    if(isset($_GET['error'])){
+  ?>
+    <h1 style="z-index: 100; position : absolute; margin : auto;"><?=$_GET['error'];?></h1>
+  <?php
+    }
+  ?>
   <div class="container">
     <div class="forms-container">
       <div class="signin-signup">
