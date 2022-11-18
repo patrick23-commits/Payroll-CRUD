@@ -5,6 +5,17 @@ class Payroll
     private $username = "";
     private $password = "";
 
+
+    public function connection($username, $password)
+    {
+    
+        $con = new mysqli("localhost", $username, $password);
+        if ($con->connect_error) {
+            exit();
+        }
+        return $con;
+    }
+
     public function createDatabase()
     {
         $isDatabaseExist = FALSE;
@@ -50,15 +61,7 @@ class Payroll
         $this->password = $_POST['password'];
         $this->login($this->username, $this->password);
     }
-    public function connection($username, $password)
-    {
     
-        $con = new mysqli("localhost", $username, $password);
-        if ($con->connect_error) {
-            exit();
-        }
-        return $con;
-    }
     public function createUser()
     {
         
@@ -75,8 +78,19 @@ class Payroll
     {   
        
         $con = $this->connection("root", "");
-        $con->select_db("payroll_crud");
+        
         $databaseMessage = $this->createDatabase();
+        $con->select_db("payroll_crud");
+
+        if(!$this->tablesCreated()){
+            $this->createTables();
+            echo "<script>
+                alert('TABLES employee, salary, attendance, tax, job and payroll CREATED!!');
+            </script>";
+        }
+        
+        $this->insertAdmin();
+
         $selectAccount = "SELECT * FROM (
                         SELECT email,password,status from admin_account
                         UNION ALL
@@ -109,8 +123,9 @@ class Payroll
 
     public function logout()
     {
-        $_SESSION['username'] = null;
-        $_SESSION['password'] = null;
+        session_start();
+        session_destroy();
+        
         header("location:login-form.php");
     }
     public function addEmployee()
@@ -206,21 +221,20 @@ class Payroll
     public function createTables()
     {
         $con = $this->connection("root", "");
-        $con->select_db($this->DB_NAME);
+        $con->select_db("payroll_crud");
 
-        $createAdminAccount = "CREATE TABLE admin_account (account_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        $createAdminAccount = "CREATE TABLE admin_account (account_id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
                             email TEXT NOT NULL UNIQUE,
                             password TEXT NOT NULL,
                             status CHAR
                         )";
         $con->query($createAdminAccount);
-
-        
+            
         $createTableJobQuery = "CREATE TABLE job (
                                 job_id int PRIMARY KEY AUTO_INCREMENT,
                                 job_name varchar(25) UNIQUE,
                                 salary_range bigint
-                            );";
+                            )";
 
         $con->query($createTableJobQuery);
 
@@ -231,7 +245,7 @@ class Payroll
             gender varchar(6) NOT NULL,
             job_id INT NOT NULL,
             FOREIGN KEY(job_id) REFERENCES job(job_id)
-        );";
+        )";
         $con->query($createTableEmployeeQuery);
 
 
@@ -434,6 +448,31 @@ class Payroll
             $deleteEmployeeQuery = "DELETE FROM employee WHERE emp_id IN ($id) ";
             $con->query($deleteEmployeeQuery);
             header("location:home.php");
+        }
+    }
+
+    public function fetchNumberOfEmployeesPerDepartment(){
+        $con = $this->connection("root","");
+        $con->select_db("payroll_crud");
+
+        $query = "SELECT COUNT(fullname) as quantity, job_name from (
+            SELECT employee.fullname, job.job_name FROM `job` 
+            LEFT JOIN employee 
+            ON
+            job.job_id = employee.job_id
+                ) as temp
+                GROUP BY job_name
+                ORDER BY quantity DESC";
+
+        $result = $con->query($query);
+
+        return $result->fetch_all();       
+    }
+    
+    public function changeAccount(){
+        if(isset($_POST['save'])){
+            echo "HEY";
+            exit();
         }
     }
 }

@@ -51,7 +51,7 @@ $(document).ready(()=>{
 
     // logout button
     $("#btn-logout").on("click", ()=>{
-        window.location.href = "index.html"
+        window.location.href = "https://localhost/Payroll-CRUD/logout.php"
     })
 
 
@@ -73,21 +73,21 @@ $(document).ready(()=>{
 
     // Go to Dashboard
     $("#btn-db").on("click", ()=>{
-        window.location.href = "home.html#dashB";
+        window.location.href = "home.php#dashB";
         CloseLeftPanel();
         if(dashB_hide) $("#dashB-collapse").trigger("click");
     })
     
     // Go to All-employee
     $("#btn-all-employee").on("click", ()=>{
-        window.location.href = "home.html#all-emp-tb";
+        window.location.href = "home.php#all-emp-tb";
         CloseLeftPanel();
         if(allEmployee_hide) $("#all-emp-tb-collapse").trigger("click");
     })
 
     // Go to Account
     $("#btn-account").on("click", ()=>{
-        window.location.href = "home.html#account-info";
+        window.location.href = "home.php#account-info";
         CloseLeftPanel();
         if(account_hide) $("#account-info-collapse").trigger("click");
     })
@@ -155,34 +155,71 @@ $(document).ready(()=>{
     $("#month-today").html("("+months[date.getMonth()]+")");
 
     // Update Date today
-    $("#date-today").html("<b>Date : </b>" + months[date.getMonth()] + " " + date.getDay() + ", " + date.getFullYear());
+    $("#date-today").html("<b>Date : </b>" + months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear());
 
 
+
+    
     // Initialize graph of employee per dept
-    let emPerDept = {
-        legend:{
-            horizontalAlign: "left",
-            verticalAlign: "center"
-        },
-        data: [{
-            type: "doughnut",
-            innerRadius: "70%",
-            showInLegend: true,
-            legendText: "{label}",
-            indexLabel: "{y}",
-            indexLabelPlacement: "inside",
-            dataPoints: [
-                { color:"#5DADE2", label: "Web Developer", y: 4 },
-                { color:"#A569BD", label: "Data Scientist", y: 7 },
-                { color:"#EC7063", label: "Mobile Developer", y: 6 },
-                { color:"#F39C12", label: "Penetration Tester", y: 3 },
-                { color:"#A6ACAF", label: "Game Developer", y: 1 }
-            ]
-        }]
-    };
-
+    // let emPerDept = {
+    //     legend:{
+    //         horizontalAlign: "left",
+    //         verticalAlign: "center"
+    //     },
+    //     data: [{
+    //         type: "doughnut",
+    //         innerRadius: "70%",
+    //         showInLegend: true,
+    //         legendText: "{label}",
+    //         indexLabel: "{y}",
+    //         indexLabelPlacement: "inside",
+    //         dataPoints: [
+    //             { color:"#5DADE2", label: "Web Developer", y:  0},
+    //             { color:"#A569BD", label: "Data Scientist", y: 0 },
+    //             { color:"#EC7063", label: "Mobile Developer", y: 0 },
+    //             { color:"#F39C12", label: "Penetration Tester", y: 3 },
+    //             { color:"#A6ACAF", label: "Game Developer", y: 1 }
+    //         ]
+    //     }]
+    // };
+    
+   function fetchNumberOfEmployee(){
+        $.ajax({
+            url : "./fetchnumofemployee.php",
+            type : "GET",
+            success : function(data) {
+               let result = JSON.parse(data)
+            $("#chartContainer").CanvasJSChart(
+                {
+                    legend:{
+                        horizontalAlign: "left",
+                        verticalAlign: "center"
+                    },
+                    data: [{
+                        type: "doughnut",
+                        innerRadius: "70%",
+                        showInLegend: true,
+                        legendText: "{label}",
+                        indexLabel: "{y}",
+                        indexLabelPlacement: "inside",
+                        dataPoints: [
+                            { color:"#5DADE2", label: result[0][1], y: parseInt(result[0][0])},
+                            { color:"#A569BD", label: result[1][1], y: parseInt(result[1][0]) },
+                            { color:"#EC7063", label: result[2][1], y: parseInt(result[2][0]) },
+                            { color:"#F39C12", label: result[3][1], y: parseInt(result[3][0])},
+                            { color:"#A6ACAF", label: result[4][1], y: parseInt(result[4][0]) }
+                        ]
+                    }]
+                }
+            )
+            }
+        })
+    }
+    fetchNumberOfEmployee()
+    
+    
     // display graph
-    $("#chartContainer").CanvasJSChart(emPerDept);
+    //$("#chartContainer").CanvasJSChart(emPerDept);
 
     function getUrlParameter(sParam) {
         const urlParams = new URLSearchParams(window.location.search);
@@ -191,6 +228,7 @@ $(document).ready(()=>{
         
         return urlParams.get(sParam);
     };
+    
 
     // function displayBlock(page_id){
     //     let toShow = "";
