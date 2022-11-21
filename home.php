@@ -40,7 +40,7 @@ $payroll->changeAccount();
         <div class="panel-left">
             <div class="common-button">
                 <div class="panel-left-header">
-                    <a href="home.html" id="logo" title="Payroll System">
+                    <a href="home.php" id="logo" title="Payroll System">
                         <img src="./assets/icon.png" alt="" srcset="">
                     </a>
                     <span id="title">
@@ -75,7 +75,7 @@ $payroll->changeAccount();
         <div class="panel-right">
             <div class="panel-right-header">
                 <h1> 
-                    <a href="home.html" class="my-logo" title="Payroll System">
+                    <a href="home.php" class="my-logo" title="Payroll System">
                         <img src="./assets/icon.png" alt="" srcset="">
                     </a>
                     <span id="page-title">
@@ -140,6 +140,7 @@ $payroll->changeAccount();
                             <div class="element-body" style="justify-content: center;">
                                 <div class="table">
                                     <div class="row head">
+                                        <div class="col check-box"><input type="checkbox" id="cb-head"></div>
                                         <div class="col">Full Name</div>
                                         <div class="col">Department</div>
                                         <div class="col">Action</div>
@@ -148,14 +149,30 @@ $payroll->changeAccount();
                                     foreach($payroll->fetchAllEmployees() as $emp){
                                     ?>
                                     <div class="row">
+                                        <div class="col check-box"><input type="checkbox" name="" class="cb-index"></div>
                                         <div class="col"><?=$emp['fullname'];?></div>
                                         <div class="col"><?=$emp['job_name'];?></div>
-                                        <div class="col"><a href=""><i class="fa-regular fa-user"></i> View Profile</a></div>
+                                        <div class="col"><a href=""><i class="fa-solid fa-user"></i> View Profile</a></div>
+                                        
                                     </div>
                                     <?php
                                     }
                                     ?>
                                 </div>
+                            </div>
+                            <div class="element-body">
+                                <button class="btn-remove-emp">
+                                    <p>
+                                        <i class="fa-solid fa-user-xmark"></i>
+                                        Remove Selected
+                                    </p>
+                                </button>
+                                <button class="btn-add-emp">
+                                    <p>
+                                        <i class="fa-solid fa-user-plus"></i>
+                                        Add New
+                                    </p>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -192,6 +209,40 @@ $payroll->changeAccount();
                 <p>Made by group CRUD | Fundamentals of Database System</p>
             </div>
         </div>
+    </div>
+    <div id="modal-add-emp" class="modal">
+        <form class="modal-content form-add-new-emp" method="post">
+            <div class="modal-header">
+                <h3 class="title">Add new Employee</h3>
+            </div>
+            <div class="modal-body">
+                <label for="Full Name">Enter full name</label>
+                <input name="full-name" id="full-name" type="text" placeholder="Full Name">
+
+                <label for="age">Enter age</label>
+                <input name="age" id="age" type="number" placeholder="Age">
+
+                <label for="gender">Enter gnder</label>
+                <select name="gender" id="gender">
+                    <option selected="true" disabled="disabled">Gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
+
+                <label for="department">Enter department</label>
+                <select name="department" id="department">
+                    <option selected="true" disabled="disabled">Department</option>
+                    <option>Web Developer</option>
+                    <option>Mobile Developer</option>
+                    <option>Game Developer</option>
+                    <option>Game Developer</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button class="btn add"><p><i class="fa-solid fa-plus"></i> Add</p></button>
+                <button class="btn close-modal" type="submit"> Close </button>
+            </div>
+        </form>
     </div>
 </body>
 </html>

@@ -25,15 +25,23 @@ $(document).ready(()=>{
         $("#close-left-panel").trigger("click");
     }
 
+    $("#cb-head").on("change", ()=>{
+        $(".cb-index").prop("checked", $("#cb-head").prop("checked") );
+    })
 
+    $(".btn-add-emp").on("click", ()=>{
+        $("#modal-add-emp").css({"display":"block"});
+    })
 
-
-
+    $(".close-modal").on("click", ()=>{
+        $("#modal-add-emp").css({"display":"none"});
+    })
     
     // close panel when esc is pressed
     $(this).on("keydown", (e)=>{
         if(e.key == "Escape"){
             CloseLeftPanel();
+            $(".close-modal").trigger("click");
         }
     });
 
@@ -61,7 +69,7 @@ $(document).ready(()=>{
     $("#search").on("keypress", (e)=>{
         if(e.which == 13) {
             if($("#search").val() !== ""){
-                window.location.href = "home.html?search="+$("#search").val()+"#all-emp-tb  ";
+                window.location.href = "home.php?search="+$("#search").val()+"#all-emp-tb  ";
             }
         }
     })

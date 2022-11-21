@@ -344,6 +344,38 @@ body {
   border-radius: 10px;
   font-size: small;
 }
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .row .col.check-box {
+  width: 15px;
+}
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .btn-remove-emp,
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .btn-add-emp {
+  padding: 10px 30px;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  transition: 0.3s;
+}
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .btn-remove-emp {
+  background: #EC7063;
+}
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .btn-remove-emp:hover,
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .btn-remove-emp:focus {
+  background: #F1948A;
+}
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .btn-remove-emp:active {
+  background: #F5B7B1;
+}
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .btn-add-emp {
+  background: #58D68D;
+}
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .btn-add-emp:hover,
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .btn-add-emp:focus {
+  background: #82E0AA;
+}
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .btn-add-emp:active {
+  background: #2ECC71;
+}
 .container .panel-right .panel-right-body .panel-right-body-content .dash-board input[type=number],
 .container .panel-right .panel-right-body .panel-right-body-content .dash-board input[type=text] {
   background: transparent;
@@ -384,7 +416,6 @@ body {
 }
 .container .panel-right .panel-right-body .panel-right-body-content #account-info form button:hover,
 .container .panel-right .panel-right-body .panel-right-body-content #account-info form button:focus {
-  padding: 10x 30px;
   background: #82E0AA;
 }
 .container .panel-right .panel-right-body .panel-right-body-content #account-info form button:active {
@@ -402,6 +433,91 @@ body {
   font-size: x-small;
   color: black;
   padding: 10px;
+}
+
+#modal-add-emp {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+#modal-add-emp .modal-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  gap: 10px;
+  width: 30%;
+  background-color: #fefefe;
+  margin: 50px auto;
+  padding: 20px;
+}
+#modal-add-emp .modal-content .modal-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+  flex-wrap: nowrap;
+}
+#modal-add-emp .modal-content .modal-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+#modal-add-emp .modal-content .modal-body input[type=text],
+#modal-add-emp .modal-content .modal-body input[type=number],
+#modal-add-emp .modal-content .modal-body select {
+  background: transparent;
+  outline: none;
+  border: 0.2px solid rgba(0, 0, 0, 0.1);
+  padding: 5px 10px;
+  margin-bottom: 20px;
+}
+#modal-add-emp .modal-content .modal-footer {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+#modal-add-emp .modal-content .modal-footer .btn {
+  padding: 10px 30px;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  transition: 0.3s;
+}
+#modal-add-emp .modal-content .modal-footer .btn.close-modal {
+  background: #EC7063;
+}
+#modal-add-emp .modal-content .modal-footer .btn.close-modal:hover,
+#modal-add-emp .modal-content .modal-footer .btn.close-modal:focus {
+  background: #F1948A;
+}
+#modal-add-emp .modal-content .modal-footer .btn.close-modal:active {
+  background: #F5B7B1;
+}
+#modal-add-emp .modal-content .modal-footer .btn.add {
+  background: #58D68D;
+}
+#modal-add-emp .modal-content .modal-footer .btn.add:hover,
+#modal-add-emp .modal-content .modal-footer .btn.add:focus {
+  background: #82E0AA;
+}
+#modal-add-emp .modal-content .modal-footer .btn.add:active {
+  background: #2ECC71;
 }
 
 /* width */
