@@ -192,39 +192,44 @@ $(document).ready(()=>{
     // };
     
    function fetchNumberOfEmployee(){
-        $.ajax({
-            url : "./fetchnumofemployee.php",
-            type : "GET",
-            success : function(data) {
-               let result = JSON.parse(data)
-            $("#chartContainer").CanvasJSChart(
-                {
-                    legend:{
-                        horizontalAlign: "left",
-                        verticalAlign: "center"
-                    },
-                    data: [{
-                        type: "doughnut",
-                        innerRadius: "70%",
-                        showInLegend: true,
-                        legendText: "{label}",
-                        indexLabel: "{y}",
-                        indexLabelPlacement: "inside",
-                        dataPoints: [
-                            { color:"#5DADE2", label: result[0][1], y: parseInt(result[0][0])},
-                            { color:"#A569BD", label: result[1][1], y: parseInt(result[1][0]) },
-                            { color:"#EC7063", label: result[2][1], y: parseInt(result[2][0]) },
-                            { color:"#F39C12", label: result[3][1], y: parseInt(result[3][0])},
-                            { color:"#A6ACAF", label: result[4][1], y: parseInt(result[4][0]) }
-                        ]
-                    }]
-                }
-            )
+  
+    $.ajax({
+        url : "./fetchnumofemployee.php",
+        type : "GET",
+        success : function(data) {
+            let result = JSON.parse(data)
+        try {
+        $("#chartContainer").CanvasJSChart(
+            {
+                legend:{
+                    horizontalAlign: "left",
+                    verticalAlign: "center"
+                },
+                data: [{
+                    type: "doughnut",
+                    innerRadius: "70%",
+                    showInLegend: true,
+                    legendText: "{label}",
+                    indexLabel: "{y}",
+                    indexLabelPlacement: "inside",
+                    dataPoints: [
+                        { color:"#5DADE2", label: result[0][1], y: parseInt(result[0][0])},
+                        { color:"#A569BD", label: result[1][1], y: parseInt(result[1][0]) },
+                        { color:"#EC7063", label: result[2][1], y: parseInt(result[2][0]) },
+                        { color:"#F39C12", label: result[3][1], y: parseInt(result[3][0])},
+                        { color:"#A6ACAF", label: result[4][1], y: parseInt(result[4][0]) }
+                    ]
+                }]
             }
-        })
+        )
+        } catch(err) {
+            console.log(err)
+        }
+        }
+    })
+    
     }
     fetchNumberOfEmployee()
-    
     
     // display graph
     //$("#chartContainer").CanvasJSChart(emPerDept);

@@ -1,8 +1,6 @@
 <?php
 session_start();
 require_once("./payroll.php");
-$rand = floor(microtime(true) * 1000);
-$_SESSION['sec'] = floor(microtime(true) * 1000);
 $GLOBALS['employee'] = $payroll->fetchEmployee($_GET['id']);
 if(!(isset($_SESSION['username']) && isset($_SESSION['password']))) {
     header("location:login.php");
@@ -26,7 +24,7 @@ $tax = $payroll->fetchTax();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
 
-    <link rel="icon" type="image/x-icon" href="https://img.freepik.com/free-vector/illustration-circle-stamp-banner-vector_53876-27183.jpg?w=2000">
+    <link rel="shortcut icon" href="./assets/icon.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
 
     <!-- FontAwsome -->
@@ -38,7 +36,7 @@ $tax = $payroll->fetchTax();
             <div class="navigator">
                 <a class="title" href="home.php">
                     <div class="logo"> 
-                        <img src="https://img.freepik.com/free-vector/illustration-circle-stamp-banner-vector_53876-27183.jpg?w=2000"> 
+                        <img src="./assets/icon.png"> 
                     </div>
                     <div> PAYROLL SYSTEM </div>
                 </a>
@@ -258,4 +256,4 @@ $tax = $payroll->fetchTax();
 <script src="//code.jquery.com/jquery-1.12.4.js"></script>
 <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<script src="script.js"></script>
+<script src="./js/script.js"></script>

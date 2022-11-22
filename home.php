@@ -1,11 +1,19 @@
 <?php
 session_start();
 require_once("./payroll.php");
+extract($_GET);
+
+setlocale(LC_MONETARY, "en_PH");
 if(isset($_SESSION['username'])===FALSE && isset($_SESSION['password'])===FALSE) {
     header("location:login-form.php");
 } 
-$payroll->changeAccount();
+$fetch = $payroll->fetchAllEmployees();
+$totalEarnings = $payroll->fetchTotalEarnings()[1];
+$month = $payroll->fetchTotalEarnings()[0];
 
+$payroll->addEmployee();
+$payroll->deleteEmployee();
+$payroll->searchEmployees();    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -84,7 +92,7 @@ $payroll->changeAccount();
                 </h1>
                 <span class="search-bar">
                     <label for="search"><i class="fa-solid fa-magnifying-glass"></i></label>
-                    <input type="search" name="search" id="search" placeholder="Search Employee" autocomplete="off" title="Press enter to search">
+                    <input type="search"  name="search" id="search" value="<?= isset($search) ? $search : null ;?>" placeholder="Search Employee" autocomplete="off" title="Press enter to search">
                 </span>
             </div>
             <div class="panel-right-body">
@@ -123,59 +131,71 @@ $payroll->changeAccount();
                         <div class="element dash-board">
                             <div class="element-header">
                                 <h3> Total Earnings this Month</h3>
-                                <p id="month-today"> (November)</p>
+                                <p id="month-today"> (<?= $month ;?>)</p>
                             </div>
                             <div class="element-body" style="justify-content:flex-start ;">
                                 <label for="total-earnings">₱</label>
-                                <input readonly type="text" name="total-earnings" value="1,092,000.00" id="total-earnings">
+                                <input readonly type="text" name="total-earnings" value="<?= $totalEarnings ;?>" id="total-earnings">
                             </div>  
                         </div>
                     </div>
-                    <div class="block" id="all-emp-tb" style="justify-content: center;">
-                        <div class="element-title">
-                            <h3>Employee List</h3>
-                            <button class="element-title-btn" id="all-emp-tb-collapse" title="Collapse"><i class="fa-solid fa-chevron-down"></i></button>
-                        </div>
-                        <div class="element employee-list">
-                            <div class="element-body" style="justify-content: center;">
-                                <div class="table">
-                                    <div class="row head">
-                                        <div class="col check-box"><input type="checkbox" id="cb-head"></div>
-                                        <div class="col">Full Name</div>
-                                        <div class="col">Department</div>
-                                        <div class="col">Action</div>
+                    <form method="post">
+                        <div class="block" id="all-emp-tb" style="justify-content: center;">
+                            <div class="element-title">
+                                <h3>Employee List</h3>
+                                <button class="element-title-btn" id="all-emp-tb-collapse" title="Collapse"><i class="fa-solid fa-chevron-down"></i></button>
+                            </div>
+                            <div class="element employee-list">
+                                <div class="element-body" style="justify-content: center;">
+                                    <div class="table">
+                                        <div class="row head">
+                                            <?php
+                                                if($fetch["count"]){
+                                            ?>
+                                            <div class="col check-box"><input type="checkbox" id="cb-head"></div>
+                                            <?php
+                                                }
+                                            ?>
+                                            <div class="col">Full Name</div>
+                                            <div class="col">Department</div>
+                                            <div class="col">Action</div>
+                                        </div>
+                                        <?php
+                                        if($fetch['message']){
+                                            echo $fetch['message'];
+                                        } else {
+                                            foreach($fetch["employees"] as $emp){
+                                            ?>
+                                            <div class="row">
+                                                <div class="col check-box"><input type="checkbox" name="emp_id[]" class="cb-index" value="<?= $emp['emp_id'] ;?>"></div>
+                                                <div class="col"><?=$emp['fullname'];?></div>
+                                                <div class="col"><?=$emp['job_name'];?></div>
+                                                <div class="col"><a href="./profile.php?id=<?=  $emp['emp_id'] ;?>"><i class="fa-solid fa-user"></i> View Profile</a></div>
+                                                
+                                            </div>
+                                            <?php
+                                            }
+                                        }
+                                        ?>
                                     </div>
-                                    <?php
-                                    foreach($payroll->fetchAllEmployees() as $emp){
-                                    ?>
-                                    <div class="row">
-                                        <div class="col check-box"><input type="checkbox" name="" class="cb-index"></div>
-                                        <div class="col"><?=$emp['fullname'];?></div>
-                                        <div class="col"><?=$emp['job_name'];?></div>
-                                        <div class="col"><a href=""><i class="fa-solid fa-user"></i> View Profile</a></div>
-                                        
-                                    </div>
-                                    <?php
-                                    }
-                                    ?>
+                                </div>
+                                <div class="element-body">
+                                    <button class="btn-remove-emp" name="delete" value="delete">
+                                        <p>
+                                            <i class="fa-solid fa-user-xmark"></i>
+                                            Remove Selected
+                                        </p>
+                                    </button>
+                                    <button class="btn-add-emp" type="button">
+                                        <p>
+                                            <i class="fa-solid fa-user-plus"></i>
+                                            Add New
+                                        </p>
+                                    </button>
                                 </div>
                             </div>
-                            <div class="element-body">
-                                <button class="btn-remove-emp">
-                                    <p>
-                                        <i class="fa-solid fa-user-xmark"></i>
-                                        Remove Selected
-                                    </p>
-                                </button>
-                                <button class="btn-add-emp">
-                                    <p>
-                                        <i class="fa-solid fa-user-plus"></i>
-                                        Add New
-                                    </p>
-                                </button>
-                            </div>
                         </div>
-                    </div>
+                    </form>
                     <div class="block" id="account-info">
                         <div class="element-title">
                             <h3>My Acount</h3>
@@ -217,7 +237,7 @@ $payroll->changeAccount();
             </div>
             <div class="modal-body">
                 <label for="Full Name">Enter full name</label>
-                <input name="full-name" id="full-name" type="text" placeholder="Full Name">
+                <input name="fullname" id="full-name" type="text" placeholder="Full Name">
 
                 <label for="age">Enter age</label>
                 <input name="age" id="age" type="number" placeholder="Age">
@@ -232,15 +252,18 @@ $payroll->changeAccount();
                 <label for="department">Enter department</label>
                 <select name="department" id="department">
                     <option selected="true" disabled="disabled">Department</option>
-                    <option>Web Developer</option>
-                    <option>Mobile Developer</option>
-                    <option>Game Developer</option>
-                    <option>Game Developer</option>
+                    <?php
+                            foreach($payroll->fetchJobs() as $job){
+                                ?>
+                                <option value="<?= $job['job_id'];?> "> <?= $job['job_name']; ?></option>
+                                <?php
+                            }
+                        ?>
                 </select>
             </div>
             <div class="modal-footer">
-                <button class="btn add"><p><i class="fa-solid fa-plus"></i> Add</p></button>
-                <button class="btn close-modal" type="submit"> Close </button>
+                <button class="btn add" name="add" value="add"><p><i class="fa-solid fa-plus"></i> Add</p></button>
+                <button class="btn close-modal" type="button"> Close </button>
             </div>
         </form>
     </div>
