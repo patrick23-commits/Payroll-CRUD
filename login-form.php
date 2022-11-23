@@ -26,9 +26,9 @@
     src="https://kit.fontawesome.com/64d58efce2.js"
     crossorigin="anonymous"
   ></script>
-  <link rel="icon" type="image/x-icon" href="https://img.freepik.com/free-vector/illustration-circle-stamp-banner-vector_53876-27183.jpg?w=2000">
+  <link rel="icon" type="image/x-icon" href="./assets/icon.png">
   <link rel="stylesheet" href="./css/login-form.css">
-  <title>Login</title>
+  <title>Payroll System | Login</title>
 </head>
 <body>
   <?php 

@@ -146,7 +146,7 @@ body {
 .container .panel-right {
   margin-left: 60px;
   width: 100%;
-  padding: 10px 30px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -228,7 +228,8 @@ body {
 }
 .container .panel-right .panel-right-body {
   height: 100%;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .container .panel-right .panel-right-body .panel-right-body-content {
   display: flex;
@@ -243,26 +244,42 @@ body {
 }
 .container .panel-right .panel-right-body .panel-right-body-content .block {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
+  flex-direction: column;
+  justify-content: center;
   align-items: stretch;
   flex-wrap: nowrap;
   gap: 15px;
   flex-wrap: wrap;
 }
-.container .panel-right .panel-right-body .panel-right-body-content .block .element-title {
+.container .panel-right .panel-right-body .panel-right-body-content .block .block-title {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   flex-wrap: nowrap;
-  width: 100%;
   background: rgb(255, 255, 255);
-  padding: 10px 30px;
+  padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
+  flex-wrap: nowrap;
 }
-.container .panel-right .panel-right-body .panel-right-body-content .block .element-title .element-title-btn {
+.container .panel-right .panel-right-body .panel-right-body-content .block .block-title h2 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+.container .panel-right .panel-right-body .panel-right-body-content .block .block-title h2 i {
+  font-size: medium;
+  padding: 10px;
+  color: white;
+  background: #4481eb;
+  border-radius: 100px;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+}
+.container .panel-right .panel-right-body .panel-right-body-content .block .block-title .block-title-btn {
   width: 30px;
   height: 30px;
   border-radius: 100px;
@@ -271,13 +288,22 @@ body {
   background: transparent;
   transition: 0.3s ease-out;
 }
-.container .panel-right .panel-right-body .panel-right-body-content .block .element-title .element-title-btn:hover {
+.container .panel-right .panel-right-body .panel-right-body-content .block .block-title .block-title-btn:hover {
   background: rgba(0, 0, 0, 0.1);
 }
-.container .panel-right .panel-right-body .panel-right-body-content .block .element-title .element-title-btn:active {
+.container .panel-right .panel-right-body .panel-right-body-content .block .block-title .block-title-btn:active {
   background: rgba(0, 0, 0, 0.3);
 }
-.container .panel-right .panel-right-body .panel-right-body-content .block .element {
+.container .panel-right .panel-right-body .panel-right-body-content .block .block-body {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+.container .panel-right .panel-right-body .panel-right-body-content .block .block-body .element {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -287,15 +313,15 @@ body {
   flex-grow: 1;
   gap: 10px;
   background: white;
-  padding: 30px;
+  padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   transition: 0.3s;
 }
-.container .panel-right .panel-right-body .panel-right-body-content .block .element .element-header {
+.container .panel-right .panel-right-body .panel-right-body-content .block .block-body .element .element-header {
   transition: 0.3s;
 }
-.container .panel-right .panel-right-body .panel-right-body-content .block .element .element-body {
+.container .panel-right .panel-right-body .panel-right-body-content .block .block-body .element .element-body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -305,9 +331,6 @@ body {
   gap: 10px;
   transition: 0.3s;
 }
-.container .panel-right .panel-right-body .panel-right-body-content .employee-list {
-  max-width: 500px;
-}
 .container .panel-right .panel-right-body .panel-right-body-content .employee-list .table {
   display: flex;
   flex-direction: column;
@@ -316,36 +339,104 @@ body {
   flex-wrap: nowrap;
   width: 100%;
 }
-.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .row.head {
-  font-weight: bold;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table input[type=checkbox]:hover {
+  cursor: pointer;
 }
-.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .row {
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .table-head {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: nowrap;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .table-head span {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
   align-items: stretch;
   flex-wrap: nowrap;
+  gap: 10px;
 }
-.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .row .col {
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .table-head button {
+  background-color: #4481eb;
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: white;
+  text-decoration: none;
+  border: none;
+  outline: none;
+}
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .table-head a:hover,
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .table-head a:focus {
+  background-color: #6c9aeb;
+}
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .table-head a:active {
+  background-color: #3a72d3;
+}
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .table-body {
+  padding: 20px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  flex-wrap: wrap;
+  row-gap: 10px;
+  -moz-column-gap: 50px;
+       column-gap: 50px;
+}
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .table-body .emp {
+  display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
-  width: 150px;
-  padding: 10px 0;
+  justify-content: flex-start;
+  gap: 15px;
 }
-.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .row .col a {
-  text-decoration: none;
-  color: white;
-  background: #4481eb;
-  padding: 10px 30px;
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .table-body .emp a:hover,
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .table-body .emp a:focus {
+  background: rgba(0, 0, 0, 0.1);
+}
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .table-body .emp a:active {
+  background: rgba(0, 0, 0, 0.2);
+}
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .table-body .emp a {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 10px;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 10px 15px;
   border-radius: 10px;
-  font-size: small;
+  color: black;
+  text-decoration: none;
+  transition: 0.3s;
 }
-.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .row .col.check-box {
-  width: 15px;
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .table-body .emp a .name p {
+  font-weight: bold;
+}
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .table-body .emp a .name .dept {
+  font-size: small;
+  cursor: pointer;
+}
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .table-body .emp a:before {
+  content: attr(fl);
+  display: inline-block;
+  height: 36px;
+  width: 36px;
+  min-width: 36px;
+  font-size: x-large;
+  text-align: center;
+  color: white;
+  border-radius: 100px;
+  background-color: #4481eb;
 }
 .container .panel-right .panel-right-body .panel-right-body-content .employee-list .btn-remove-emp,
 .container .panel-right .panel-right-body .panel-right-body-content .employee-list .btn-add-emp {
@@ -446,6 +537,7 @@ body {
   overflow: auto;
   background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.4);
+  transition: 1s;
 }
 #modal-add-emp .modal-content {
   display: flex;
@@ -457,7 +549,7 @@ body {
   width: 30%;
   background-color: #fefefe;
   margin: 50px auto;
-  padding: 20px;
+  padding: 30px;
 }
 #modal-add-emp .modal-content .modal-header {
   display: flex;
@@ -476,6 +568,7 @@ body {
 }
 #modal-add-emp .modal-content .modal-body input[type=text],
 #modal-add-emp .modal-content .modal-body input[type=number],
+#modal-add-emp .modal-content .modal-body input[type=date],
 #modal-add-emp .modal-content .modal-body select {
   background: transparent;
   outline: none;
@@ -532,11 +625,11 @@ body {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #85C1E9;
+  background: #4481eb;
   border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #2E86C1;
+  background: #336dd3;
 }/*# sourceMappingURL=home.css.map */

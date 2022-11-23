@@ -3,10 +3,10 @@ session_start();
 require_once("./payroll.php");
 extract($_GET);
 
-setlocale(LC_MONETARY, "en_PH");
-if(isset($_SESSION['username'])===FALSE && isset($_SESSION['password'])===FALSE) {
-    header("location:login-form.php");
-} 
+// setlocale(LC_MONETARY, "en_PH");
+// if(isset($_SESSION['username'])===FALSE && isset($_SESSION['password'])===FALSE) {
+//     header("location:login-form.php");
+// } 
 $fetch = $payroll->fetchAllEmployees();
 $totalEarnings = $payroll->fetchTotalEarnings()[1];
 $month = $payroll->fetchTotalEarnings()[0];
@@ -34,6 +34,11 @@ $payroll->searchEmployees();
     <!-- Source from https://canvasjs.com/jquery-charts/ -->
     <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
     <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+
+    <!-- Calendar -->
+    <!-- Source from https://github.com/brospars/simple-calendar -->
+    <script src="./js/jquery.simple-calendar.js"></script>
+    <link rel="stylesheet" href="./css/simple-calendar.css">
     
     <!-- Page JS -->
     <script src="./js/home.js"></script>
@@ -86,9 +91,7 @@ $payroll->searchEmployees();
                     <a href="home.php" class="my-logo" title="Payroll System">
                         <img src="./assets/icon.png" alt="" srcset="">
                     </a>
-                    <span id="page-title">
-                        Payroll System
-                    </span>
+                    <span id="page-title"> Payroll System </span>
                 </h1>
                 <span class="search-bar">
                     <label for="search"><i class="fa-solid fa-magnifying-glass"></i></label>
@@ -98,85 +101,85 @@ $payroll->searchEmployees();
             <div class="panel-right-body">
                 <div class="panel-right-body-content">
                     <div class="block" id="dashB">
-                        <div class="element-title">
-                            <h3>Dashboard</h3>
-                            <button class="element-title-btn" id="dashB-collapse" title="Collapse"><i class="fa-solid fa-chevron-down"></i></button>
+                        <div class="block-title">
+                            <h2><i class="fa-solid fa-border-all"></i> Dashboard</h2>
+                            <button class="block-title-btn" id="dashB-collapse" title="Collapse"><i class="fa-solid fa-chevron-down"></i></button>
                         </div>
-                        <div class="element dash-board">
-                            <div class="element-header"><h3>Overview</h3></div>
-                            <div class="element-body" style="justify-content:flex-start ;">
-                                <div class="flex-col">
+                        <div class="block-body">
+                            <div class="element dash-board">
+                                <div class="element-header" style="text-align: center;"><h1>Welcome!</h1></div>
+                                <div class="element-body" style="max-width: 200px;">
+                                    <div>
+                                        Good day (username)!
+                                    </div>
+                                    <div style="font-weight:bold;"> Quick Help </div>
+                                </div>
+                            </div>
+                            <div class="element dash-board">
+                                <div class="element-body" style="justify-content:center ;">
                                     <p id="date-today"></p>
                                 </div>
                             </div>
-                            <div class="element-body" style="justify-content:flex-start ;">
-                                <div class="flex-col">
-                                    <label for="total-employee">Total Employees</label>
-                                    <input readonly type="text" name="total-employee" value="21" id="total-employee">
-                                </div>
-                                <div class="flex-col">
-                                    <label for="time-in">Timed in today</label>
-                                    <input readonly type="text" name="time-in" value="18" id="time-in">
-                                    <label for="time-out">Timed out today</label>
-                                    <input readonly type="text" name="time-out" value="1" id="time-out">
-                                </div>
+                            <div class="element dash-board">
+                                <div class="element-header"><h3>Employee per department</h3></div>
+                                <div class="element-body" style="justify-content:center ;">
+                                    <div id="chartContainer" style="height: 250px; width: 150px;"></div>
+                                </div>  
                             </div>
-                        </div>
-                        <div class="element dash-board">
-                            <div class="element-header"><h3>Employee per department</h3></div>
-                            <div class="element-body" style="justify-content:center ;">
-                                <div id="chartContainer" style="height: 300px; width: 300px;"></div>
-                            </div>  
-                        </div>
-                        <div class="element dash-board">
-                            <div class="element-header">
-                                <h3> Total Earnings this Month</h3>
-                                <p id="month-today"> (<?= $month ;?>)</p>
-                            </div>
-                            <div class="element-body" style="justify-content:flex-start ;">
-                                <label for="total-earnings">₱</label>
-                                <input readonly type="text" name="total-earnings" value="<?= $totalEarnings ;?>" id="total-earnings">
-                            </div>  
                         </div>
                     </div>
-                    <form method="post">
-                        <div class="block" id="all-emp-tb" style="justify-content: center;">
-                            <div class="element-title">
-                                <h3>Employee List</h3>
-                                <button class="element-title-btn" id="all-emp-tb-collapse" title="Collapse"><i class="fa-solid fa-chevron-down"></i></button>
-                            </div>
+                    <form class="block" id="all-emp-tb" style="justify-content: center;" method="post">
+                        <div class="block-title">
+                            <h2><i class="fa-solid fa-list-ol"></i> Employee List</h2>
+                            <button type="button" class="block-title-btn" id="all-emp-tb-collapse" title="Collapse"><i class="fa-solid fa-chevron-down"></i></button>
+                        </div>
+                        <div class="block-body">
                             <div class="element employee-list">
                                 <div class="element-body" style="justify-content: center;">
                                     <div class="table">
-                                        <div class="row head">
-                                            <?php
-                                                if($fetch["count"]){
-                                            ?>
-                                            <div class="col check-box"><input type="checkbox" id="cb-head"></div>
-                                            <?php
-                                                }
-                                            ?>
-                                            <div class="col">Full Name</div>
-                                            <div class="col">Department</div>
-                                            <div class="col">Action</div>
+                                        <div class="table-head">
+                                            <?php if($fetch["count"]){ ?>
+                                                <span>
+                                                    <input type="checkbox" id="cb-head" title="Select All">
+                                                    <p> Select All </p>
+                                                </span>
+                                            <?php }  ?>
+                                            <button id="btn-refresh-tb" title="Refresh Content"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
                                         </div>
+                                        <div class="table-body">
                                         <?php
                                         if($fetch['message']){
                                             echo $fetch['message'];
                                         } else {
                                             foreach($fetch["employees"] as $emp){
+                                                $cjobs = [
+                                                            "web"=> "#5DADE2",
+                                                            "data"=>"#A569BD",
+                                                            "mob"=> "#EC7063",
+                                                            "pen"=> "#F39C12",
+                                                            "game"=>"#A6ACAF",
+                                                        ];
                                             ?>
-                                            <div class="row">
-                                                <div class="col check-box"><input type="checkbox" name="emp_id[]" class="cb-index" value="<?= $emp['emp_id'] ;?>"></div>
-                                                <div class="col"><?=$emp['fullname'];?></div>
-                                                <div class="col"><?=$emp['job_name'];?></div>
-                                                <div class="col"><a href="./profile.php?id=<?=  $emp['emp_id'] ;?>"><i class="fa-solid fa-user"></i> View Profile</a></div>
-                                                
-                                            </div>
+                                                    <div class="emp">
+                                                        <div class="check-box">
+                                                            <input type="checkbox" name="emp_id[]" class="cb-index" value="<?= $emp['emp_id'] ;?>">
+                                                        </div>
+                                                        <a  href="./profile.php?id=<?=  $emp['emp_id'] ;?>" fl="<?=strtoupper($emp['fullname'][0]);?>">
+                                                            <div class="name">
+                                                                <p>
+                                                                    <?=$emp['fullname'];?>
+                                                                </p>
+                                                                <div class="dept">
+                                                                    <?=$emp['job_name'];?>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
                                             <?php
                                             }
                                         }
                                         ?>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="element-body">
@@ -197,30 +200,32 @@ $payroll->searchEmployees();
                         </div>
                     </form>
                     <div class="block" id="account-info">
-                        <div class="element-title">
-                            <h3>My Acount</h3>
-                            <button class="element-title-btn" id="account-info-collapse" title="Collapse"><i class="fa-solid fa-chevron-down"></i></button>
+                        <div class="block-title">
+                            <h2><i class="fa-solid fa-user"></i> My Acount</h2>
+                            <button class="block-title-btn" id="account-info-collapse" title="Collapse"><i class="fa-solid fa-chevron-down"></i></button>
                         </div>
-                        <form class="element flex-col my-account" method="post">
-                            <div class="element-header">
-                                <h3>Account Details</h3>
-                            </div>
-                            <div class="element-body">
-                                <div class="flex-col">
-                                    <label for="username">Username</label>
-                                    <input name="username" id="username" type="text" value="<?=$_SESSION['username'];?>" readonly>
-                                    <label for="old-pass">Old Password</label>
-                                    <input name="old-pass" id="old-pass" type="password" placeholder="Enter Old Password">
-                                    <label for="new-pass">New Password</label>
-                                    <input name="new-pass" id="new-pass" type="password" placeholder="Enter New Password">
+                        <div class="block-body">
+                            <form class="element flex-col my-account" method="post">
+                                <div class="element-header">
+                                    <h3>Account Details</h3>
                                 </div>
-                                <div class="flex-col" style="justify-content: flex-end;">
-                                    <button name="btn-save" id="btn-save" type="submit" title="Save" value="save">
-                                        <i class="fa-solid fa-floppy-disk"></i> Save
-                                    </button>
+                                <div class="element-body">
+                                    <div class="flex-col">
+                                        <label for="username">Username</label>
+                                        <input name="username" id="username" type="text" value="<?=$_SESSION['username'];?>" readonly>
+                                        <label for="old-pass">Old Password</label>
+                                        <input name="old-pass" id="old-pass" type="password" placeholder="Enter Old Password">
+                                        <label for="new-pass">New Password</label>
+                                        <input name="new-pass" id="new-pass" type="password" placeholder="Enter New Password">
+                                    </div>
+                                    <div class="flex-col" style="justify-content: flex-end;">
+                                        <button name="btn-save" id="btn-save" type="submit" title="Save" value="save">
+                                            <i class="fa-solid fa-floppy-disk"></i> Save
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -239,10 +244,10 @@ $payroll->searchEmployees();
                 <label for="Full Name">Enter full name</label>
                 <input name="fullname" id="full-name" type="text" placeholder="Full Name">
 
-                <label for="age">Enter age</label>
-                <input name="age" id="age" type="number" placeholder="Age">
+                <label for="bday">Enter birth date</label>
+                <input name="bday" id="bday" type="date" placeholder="Birth Date">
 
-                <label for="gender">Enter gnder</label>
+                <label for="gender">Enter gender</label>
                 <select name="gender" id="gender">
                     <option selected="true" disabled="disabled">Gender</option>
                     <option>Male</option>
@@ -253,16 +258,16 @@ $payroll->searchEmployees();
                 <select name="department" id="department">
                     <option selected="true" disabled="disabled">Department</option>
                     <?php
-                            foreach($payroll->fetchJobs() as $job){
-                                ?>
-                                <option value="<?= $job['job_id'];?> "> <?= $job['job_name']; ?></option>
-                                <?php
-                            }
-                        ?>
+                        foreach($payroll->fetchJobs() as $job){
+                            ?>
+                            <option value="<?= $job['job_id'];?> "> <?= $job['job_name']; ?></option>
+                            <?php
+                        }
+                    ?>
                 </select>
             </div>
             <div class="modal-footer">
-                <button class="btn add" name="add" value="add"><p><i class="fa-solid fa-plus"></i> Add</p></button>
+                <button class="btn add" name="add" value="add"><p> Add</p></button>
                 <button class="btn close-modal" type="button"> Close </button>
             </div>
         </form>

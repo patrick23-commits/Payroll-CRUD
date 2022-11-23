@@ -85,7 +85,7 @@ class Payroll
         if(!$this->tablesCreated()){
             $this->createTables();
             echo "<script>
-                alert('TABLES employee, salary, attendance, tax, job and payroll CREATED!!');
+                alert('Tables employee, salary, attendance, tax, job and payroll are successfully created!');
             </script>";
         }
         
@@ -113,8 +113,8 @@ class Payroll
         if ($databaseMessage) {
             $script .= "alert(' " . $databaseMessage . "')\n";
         }
-        $script .= "window.location.href = 'https://localhost' + window.location.pathname;
-        </script>";
+        $script .= "window.location.href = 'https://localhost' + window.location.pathname;";
+        $script .= "</script>";
 
         echo $script;
 
@@ -139,12 +139,12 @@ class Payroll
                 $employee = "INSERT INTO employee (`fullname`, `age`, `gender`, `job_id`) VALUES ('$fullname', $age, '$gender', $department)";
                 if ($con->query($employee) === TRUE) {
                     echo "<script> 
-                            window.location.href = 'https://localhost' + window.location.pathname ;
+                            window.location.href = 'https://localhost' + window.location.pathname + '#all-emp-tb';
                             alert('$_POST[fullname] added.') 
                             </script>";
                 } else {
                     echo "<script> 
-                            window.location.href = 'https://localhost'  + window.location.pathname ;
+                            window.location.href = 'https://localhost'  + window.location.pathname + '#all-emp-tb';
                             alert('$_POST[fullname] is already exist.');
                         </script>";
                 }
@@ -185,9 +185,9 @@ class Payroll
                     }
                 } else {
                     if ($_SERVER['REQUEST_METHOD'] == "GET" && isset($search)) {
-                        $message = "<h1>No Employee named '$search'</h1>";
+                        $message = "<p style='margin: 10px 0; font-size: large;'><i class='fa-regular fa-face-frown'></i> No employee named '$search'</p>";
                     } else {
-                        $message =  "<h1>No Employee!!</h1>";
+                        $message =  "<p style='margin: 10px 0; font-size: large;'><i class='fa-solid fa-clipboard-list'></i> Employee List is empty.</p>";
                     }
                 }
                 

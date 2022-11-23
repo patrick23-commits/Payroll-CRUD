@@ -12,7 +12,6 @@
     margin: 0;
     padding: 0;
     scroll-behavior: smooth;
-    // font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-family: 'Poppins', sans-serif;
 }
 
@@ -30,7 +29,6 @@
 
 body{
     height: 100vh;
-    // background: #D6EAF8;
 }
 
 .container:before {
@@ -39,7 +37,6 @@ body{
     width: 2000px;
     height: 2000px;
     border-radius: 50%;
-    // background: linear-gradient(-45deg, #4481eb, #04befe);
     background:  #4481eb;
     top: -10%;
     right: 48%;
@@ -129,7 +126,7 @@ body{
     .panel-right{
         margin-left: 60px;
         width: 100%;
-        padding: 10px 30px;
+        padding: 10px;
         @include flex-body(column);
         .panel-right-header{
             @media (max-width: 680px) {
@@ -184,7 +181,8 @@ body{
         }
         .panel-right-body{
             height: 100%;
-            overflow: auto;
+            overflow-y: auto;
+            overflow-x: hidden;
             .panel-right-body-content{
                 @include flex-body(column, center);
                 flex-wrap: wrap;
@@ -192,23 +190,33 @@ body{
                 padding: 10px;
                 min-width: none;
                 .block{
-                    @include flex-body(row);
+                    @include flex-body(column, center);
                     gap: 15px;
                     flex-wrap: wrap;
-                    
-                    // display: none;
-                    // opacity: 0;
-                    // transition: display 0s 0.3s, opacity 0.3s linear;
 
-                    .element-title{
+                    .block-title{
                         @include flex-body(row, space-between, center);
-                        width: 100%;
                         background: rgba(255, 255, 255, 1);
-                        padding: 10px 30px;
+                        padding: 20px;
                         box-shadow: 0 0 10px rgba(0, 0, 0, .2);
                         border-radius: 10px;
+                        flex-wrap: nowrap;
 
-                        .element-title-btn{
+                        h2{
+                            @include flex-body(row, center, center, nowrap);
+                            gap: 10px;
+
+                            i{
+                                font-size: medium;
+                                padding: 10px;
+                                color: white;
+                                background: #4481eb;
+                                border-radius: 100px;
+                                box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+                            }
+                        }
+
+                        .block-title-btn{
                             width: 30px;
                             height: 30px;
                             border-radius: 100px;
@@ -218,65 +226,131 @@ body{
                             transition: 0.3s ease-out;
                         }
                         
-                        .element-title-btn:hover{
+                        .block-title-btn:hover{
                             background: rgba(0, 0, 0, .1);
                         }
-                        .element-title-btn:active{
+                        .block-title-btn:active{
                             background: rgba(0, 0, 0, .3);
                         }
                     }
-                    
-                    .element{
-                        @include flex-body(column);
+
+                    .block-body{
+                        @include flex-body(row);
                         flex-wrap: wrap;
-                        flex-grow: 1;
-                        gap: 10px;
-                        background: white;
-                        padding: 30px;
-                        box-shadow: 0 0 10px rgba(0, 0, 0, .2);
-                        border-radius: 10px;
-                        transition: 0.3s;
+                        gap: 15px;
 
-                        .element-header{
-                            transition: 0.3s
-                        }
-
-                        .element-body{
-                            @include flex-body(row, space-between);
+                        .element{
+                            @include flex-body(column);
                             flex-wrap: wrap;
+                            flex-grow: 1;
                             gap: 10px;
-                            transition: 0.3s
+                            background: white;
+                            padding: 20px;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+                            border-radius: 10px;
+                            transition: 0.3s;
+    
+                            .element-header{
+                                transition: 0.3s
+                            }
+    
+                            .element-body{
+                                @include flex-body(row, space-between);
+                                flex-wrap: wrap;
+                                gap: 10px;
+                                transition: 0.3s
+                            }
                         }
                     }
                 }
                 
 
                 .employee-list{
-                    max-width: 500px;
                     .table{
                         @include flex-body(column);
                         width: 100%;
-                        .row.head{
-                            font-weight: bold;
-                            border-bottom: 1px solid rgba(0, 0, 0, .3);
+
+                        input[type="checkbox"]:hover{
+                            cursor: pointer;
                         }
-                        .row{
-                            @include flex-body(row, space-between);
-                            .col{
-                                @include flex-body(column, center, center);
-                                width: 150px;
-                                padding: 10px 0;
-                                a{
-                                    text-decoration: none;
-                                    color: white;
-                                    background: #4481eb;
-                                    padding: 10px 30px;
-                                    border-radius: 10px;
-                                    font-size: small;
-                                }
+                        .table-head{
+                            @include flex-body(row, space-around, center);
+                            padding: 10px 0;
+                            border-bottom: 1px solid rgba(0, 0, 0, .3);
+                            span{
+                                @include flex-body(row);
+                                gap: 10px;
                             }
-                            .col.check-box{
-                                width: 15px;
+                            button{
+                                background-color: #4481eb;
+                                padding: 10px 20px;
+                                border-radius: 10px;
+                                color: white;
+                                text-decoration: none;
+                                border: none;
+                                outline: none;
+                            }
+                            a:hover,
+                            a:focus{
+                                background-color: #6c9aeb;
+                            }
+                            a:active{
+                                background-color: #3a72d3;
+                            }
+                        }
+                        .table-body{
+                            padding: 20px;
+                            @include flex-body(row);
+                            flex-wrap: wrap;
+                            row-gap: 10px;
+                            column-gap: 50px;
+                            .emp{
+                                @include flex-body(row, center, center);
+                                justify-content: flex-start;
+                                gap: 15px;
+                                
+                                a:hover,
+                                a:focus{
+                                    background: rgba(0, 0, 0, .1);
+                                }
+                                a:active{
+                                    background: rgba(0, 0, 0, .2);  
+                                }
+
+                                a{
+                                    @include flex-body(row);
+                                    align-items: center;
+                                    flex-wrap: nowrap;
+                                    gap: 10px;
+                                    background-color: rgba(0, 0, 0, .05);
+                                    padding: 10px 15px;
+                                    border-radius: 10px;
+                                    color: black;
+                                    text-decoration: none;
+                                    transition: .3s;
+                                    .name{
+                                        p{
+                                            font-weight: bold;
+                                        }
+                                        .dept{
+                                            font-size: small;
+                                            cursor: pointer;
+                                        }
+                                    }
+                                }
+
+                                a:before{
+                                    content: attr(fl);
+                                    display: inline-block;
+                                    height: 36px;
+                                    width: 36px;
+                                    min-width: 36px;
+                                    font-size: x-large;
+                                    text-align: center;
+                                    color: white;
+                                    border-radius: 100px;
+                                    background-color: #4481eb;
+                                }
                             }
                         }
                     }
@@ -394,6 +468,7 @@ body{
     overflow: auto; 
     background-color: rgb(0,0,0); 
     background-color: rgba(0,0,0,0.4); 
+    transition: 1s;
 
     .modal-content {
         @include flex-body(column);
@@ -401,7 +476,7 @@ body{
         width: 30%;
         background-color: #fefefe;
         margin: 50px auto; 
-        padding: 20px;
+        padding: 30px;
         
         .modal-header{
             @include flex-body(row, space-between);
@@ -412,6 +487,7 @@ body{
 
             input[type="text"], 
             input[type="number"],
+            input[type="date"],
             select{
                 background: transparent;
                 outline: none;
@@ -463,10 +539,6 @@ body{
 }
 
 
-
-
-
-
 /* width */
 ::-webkit-scrollbar {
     width: 10px;  
@@ -475,16 +547,15 @@ body{
 /* Track */
 ::-webkit-scrollbar-track {
     background: transparent; 
-     
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #85C1E9 ; 
+    background: #4481eb ; 
     border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: #2E86C1; 
+    background: #336dd3; 
 }

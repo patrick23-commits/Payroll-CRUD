@@ -152,21 +152,22 @@ $(document).ready(()=>{
 
 
 
-
-
     // Initialize months
-    const months = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"];
+    // const months = ["January", "February", "March", "April", "May", "June",
+    // "July", "August", "September", "October", "November", "December"];
     
-    const date = new Date();
-    // Update month today
-    $("#month-today").html("("+months[date.getMonth()]+")");
+    // const date = new Date();
+    // // Update month today
+    // $("#month-today").html("("+months[date.getMonth()]+")");
 
-    // Update Date today
-    $("#date-today").html("<b>Date : </b>" + months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear());
+    // // Update Date today
+    // $("#date-today").html("Today is <p>" + months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear() +"</p>");
 
+    $("#date-today").simpleCalendar();
 
-
+    $("#btn-refresh-tb").on("click", ()=>{ 
+        location.reload();
+    })
     
     // Initialize graph of employee per dept
     // let emPerDept = {
@@ -198,33 +199,33 @@ $(document).ready(()=>{
         type : "GET",
         success : function(data) {
             let result = JSON.parse(data)
-        try {
-        $("#chartContainer").CanvasJSChart(
-            {
-                legend:{
-                    horizontalAlign: "left",
-                    verticalAlign: "center"
-                },
-                data: [{
-                    type: "doughnut",
-                    innerRadius: "70%",
-                    showInLegend: true,
-                    legendText: "{label}",
-                    indexLabel: "{y}",
-                    indexLabelPlacement: "inside",
-                    dataPoints: [
-                        { color:"#5DADE2", label: result[0][1], y: parseInt(result[0][0])},
-                        { color:"#A569BD", label: result[1][1], y: parseInt(result[1][0]) },
-                        { color:"#EC7063", label: result[2][1], y: parseInt(result[2][0]) },
-                        { color:"#F39C12", label: result[3][1], y: parseInt(result[3][0])},
-                        { color:"#A6ACAF", label: result[4][1], y: parseInt(result[4][0]) }
-                    ]
-                }]
+            try {
+            $("#chartContainer").CanvasJSChart(
+                {
+                    legend:{
+                        // horizontalAlign: "left",
+                        verticalAlign: "top"
+                    },
+                    data: [{
+                        type: "doughnut",
+                        innerRadius: "70%",
+                        showInLegend: true,
+                        legendText: "{label}",
+                        indexLabel: "{y}",
+                        indexLabelPlacement: "inside",
+                        dataPoints: [
+                            { color:"#5DADE2", label: result[0][1], y: parseInt(result[0][0])},
+                            { color:"#A569BD", label: result[1][1], y: parseInt(result[1][0]) },
+                            { color:"#EC7063", label: result[2][1], y: parseInt(result[2][0]) },
+                            { color:"#F39C12", label: result[3][1], y: parseInt(result[3][0])},
+                            { color:"#A6ACAF", label: result[4][1], y: parseInt(result[4][0]) }
+                        ]
+                    }]
+                }
+            )
+            } catch(err) {
+                console.log(err)
             }
-        )
-        } catch(err) {
-            console.log(err)
-        }
         }
     })
     
