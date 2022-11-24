@@ -12,8 +12,7 @@ if(isset($_SESSION['username'])===FALSE && isset($_SESSION['password'])===FALSE)
 
 $fetchEmployee = $payroll->fetchAllEmployees();
 
-$payroll->deleteEmployee();
-$payroll->searchEmployees();   
+$payroll->deleteEmployee();  
 //$changeAccountMessage = $payroll->changeAccount($_SESSION['username'], $_SESSION['status']); 
 ?>
 <!DOCTYPE html>

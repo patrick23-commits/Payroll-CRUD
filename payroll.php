@@ -87,9 +87,10 @@ class Payroll
             echo "<script>
                 alert('Tables employee, salary, attendance, tax, job and payroll are successfully created!');
             </script>";
+            $this->insertAdmin('admin', 'admin');
         }
         
-        $this->insertAdmin();
+        
 
         $selectAccount = "SELECT * FROM (
                         SELECT email,password,status from admin_account
@@ -102,7 +103,6 @@ class Payroll
             header("Location:login-form.php?error=user not found"); 
             exit();
         }
-
         $_SESSION['username'] = $this->username;
         $_SESSION['password'] = $this->password;
         $_SESSION['status'] = $result->fetch_assoc()["status"];
@@ -158,7 +158,7 @@ class Payroll
                     $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
                     JOIN job    
                     ON employee.job_id = job.job_id
-                    WHERE employee.fullname LIKE '%$search %'
+                    WHERE employee.fullname LIKE '%$search%'
                     ORDER BY employee.fullname ASC";
                 } else {
                     $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
@@ -188,24 +188,24 @@ class Payroll
         return array("employees"=>$employees, "count"=>count($employees), "message"=>$message);
     }
 
-    public function searchEmployees(){
-    extract($_GET);
-    $employees = array();
-    $con = $this->connection("root", "");
-    $con->select_db($this->DB_NAME);
-    if($_SERVER['REQUEST_METHOD'] == "GET"){
-        if (isset($search)) {
-            $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
-            JOIN job    
-            ON employee.job_id = job.job_id
-            WHERE employee.fullname LIKE '%" . $search . "%'
-            ORDER BY employee.fullname ASC";
+    // public function searchEmployees(){
+    // extract($_GET);
+    // $employees = array();
+    // $con = $this->connection("root", "");
+    // $con->select_db($this->DB_NAME);
+    // if($_SERVER['REQUEST_METHOD'] == "GET"){
+    //     if (isset($search)) {
+    //         $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
+    //         JOIN job    
+    //         ON employee.job_id = job.job_id
+    //         WHERE employee.fullname LIKE '%" . $search . "%'
+    //         ORDER BY employee.fullname ASC";
             
-            $con->query($fetchEmployeesQuery);
-        }
+    //         $con->query($fetchEmployeesQuery);
+    //     }
         
-    }
-    }
+    // }
+    // }
 
     public function fetchEmployee($emp_id)
     {
@@ -333,13 +333,15 @@ class Payroll
         
     }
 
-    public function insertAdmin() {
+    public function insertAdmin($uname, $pass) {
         $con = $this->connection("root", "");
         $con->select_db("payroll_crud");
 
-        $insertAdminQuery = "INSERT INTO admin_account (`email`,`password`,`status`) VALUES ('admin', PASSWORD('admin'), 'A')";
+        $insertAdminQuery = "INSERT INTO admin_account (`email`,`password`,`status`) VALUES('$uname', PASSWORD('$pass'), 'A')";
+                            // -- SELECT 'admin', PASSWORD('admin'), 'A' FROM dual 
+                            // -- WHERE NOT EXISTS 
+                            // -- (SELECT * FROM admin_account WHERE email='admin')";
         $con->query($insertAdminQuery);
-        
         $con->close();
     }
     public function insertDepartmentAndDeduction()
