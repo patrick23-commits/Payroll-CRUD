@@ -164,11 +164,14 @@ $(document).ready(()=>{
     // $("#date-today").html("Today is <p>" + months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear() +"</p>");
 
     $("#date-today").simpleCalendar();
-
-    $("#btn-refresh-tb").on("click", ()=>{ 
-        location.reload();
-    })
     
+    $("#btn-refresh-tb").on("click", ()=>{ 
+        
+        window.location.reload()
+        window.location.href = 'https://localhost' + window.location.pathname + '#all-emp-tb';
+
+    })
+
     // Initialize graph of employee per dept
     // let emPerDept = {
     //     legend:{
@@ -192,6 +195,61 @@ $(document).ready(()=>{
     //     }]
     // };
     
+
+    // Make an AJAX Request to add employee
+    $("#add_emp").on("submit", (e)=>{
+        e.preventDefault()
+        $.ajax({
+            url : "./addEmployee.php",
+            type : "POST",
+            contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+            data : { fullname : $("#full-name").val(), bday : $("#bday").val() , gender : $("#gender").val(), department : $("#department").val()},
+            success : (message)=>{
+                let resp = JSON.parse(message)
+                let alertMessage = resp['message'];
+                let messageAction = alertMessage.substr(alertMessage.indexOf("added."))
+                
+                
+                switch(messageAction) {
+                    case "added.":
+                        window.location.reload()
+                        alert(alertMessage)
+                        window.location.href = 'https://localhost' + window.location.pathname + '#all-emp-tb';
+                        break
+                    default:
+                        alert(alertMessage)
+                }
+            }
+        })
+    })
+
+    // AJAX request for updating account
+    $("#changeAccountForm").on("submit", (e)=>{
+        e.preventDefault()
+        if($("#old-pass").val() && $("#new-pass").val()){
+            $.ajax({
+                url : "./changeAccount.php",
+                type : "POST",
+                contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+                data : { old_pass : $("#old-pass").val(), new_pass : $("#new-pass").val()},
+                success : (message)=>{
+                    let resp = JSON.parse(message)
+                    alert(resp['message'])
+
+                    switch(resp['message']){
+                        case "Old password incorrect!!":
+                            $("#old-pass").css({border : "1px solid red"})
+                            $("#new-pass").val("")
+                            break
+                    }
+                    
+                }
+            })
+        }
+        
+    })
+
+
    function fetchNumberOfEmployee(){
   
     $.ajax({
@@ -199,7 +257,6 @@ $(document).ready(()=>{
         type : "GET",
         success : function(data) {
             let result = JSON.parse(data)
-            try {
             $("#chartContainer").CanvasJSChart(
                 {
                     legend:{
@@ -223,9 +280,6 @@ $(document).ready(()=>{
                     }]
                 }
             )
-            } catch(err) {
-                console.log(err)
-            }
         }
     })
     

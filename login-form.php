@@ -1,8 +1,6 @@
 <?php
     session_start();
     require_once("./payroll.php");
-    error_reporting(0);
-
     
     if(isset($_SESSION['username']) && isset($_SESSION['password'])) {
       if($_SESSION['status'] === "A")

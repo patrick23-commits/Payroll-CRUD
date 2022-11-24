@@ -102,7 +102,7 @@ class Payroll
             header("Location:login-form.php?error=user not found"); 
             exit();
         }
-    
+
         $_SESSION['username'] = $this->username;
         $_SESSION['password'] = $this->password;
         $_SESSION['status'] = $result->fetch_assoc()["status"];
@@ -113,7 +113,7 @@ class Payroll
         if ($databaseMessage) {
             $script .= "alert(' " . $databaseMessage . "')\n";
         }
-        $script .= "window.location.href = 'https://localhost' + window.location.pathname;";
+        $script .= "window.location.href = 'https://localhost' + window.location.pathname";
         $script .= "</script>";
 
         echo $script;
@@ -130,34 +130,24 @@ class Payroll
     }
     public function addEmployee()
     {
+        $message = "";
         extract($_POST);
-        if(isset($add)) {
-            print($add);
-            $con = $this->connection("root", "");
-            $con->select_db($this->DB_NAME);
-            if (!$con->connect_error) {
-                $employee = "INSERT INTO employee (`fullname`, `age`, `gender`, `job_id`) VALUES ('$fullname', $age, '$gender', $department)";
-                if ($con->query($employee) === TRUE) {
-                    echo "<script> 
-                            window.location.href = 'https://localhost' + window.location.pathname + '#all-emp-tb';
-                            alert('$_POST[fullname] added.') 
-                            </script>";
-                } else {
-                    echo "<script> 
-                            window.location.href = 'https://localhost'  + window.location.pathname + '#all-emp-tb';
-                            alert('$_POST[fullname] is already exist.');
-                        </script>";
-                }
-            }
-            $con->close();
+        $con = $this->connection("root", "");
+        $con->select_db($this->DB_NAME);
+        if (!$con->connect_error) {
+            $employee = "INSERT INTO employee (`fullname`, `date_of_birth`, `gender`, `job_id`) VALUES ('$fullname', '$bday', '$gender', $department)";
+            
+            $message = $con->query($employee) === TRUE ?  "$_POST[fullname] added." : "$_POST[fullname] is already exist.";
         }
+        $con->close();
         
-        
+        return $message;
     }
 
     public function fetchAllEmployees()
     {
         extract($_GET);
+        
         $fetchEmployeesQuery = "";
         $message = "";
         $employees = array();
@@ -224,7 +214,7 @@ class Payroll
         $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
         if (!$con->connect_error) {
-            $fetchEmployeeQuery = "SELECT employee.emp_id,employee.fullname, employee.age,employee.gender,
+            $fetchEmployeeQuery = "SELECT employee.emp_id,employee.fullname, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),employee.date_of_birth)), '%Y') + 0 AS age,employee.gender,
                                     job.job_name, job.salary_range
                                     FROM employee
                                     LEFT JOIN job
@@ -271,7 +261,7 @@ class Payroll
         $createTableEmployeeQuery = "CREATE TABLE employee (
             emp_id int PRIMARY KEY AUTO_INCREMENT,
             fullname varchar(50) NOT NULL UNIQUE,
-            age INT NOT NULL,
+            date_of_birth DATE NOT NULL,
             gender varchar(6) NOT NULL,
             job_id INT NOT NULL,
             FOREIGN KEY(job_id) REFERENCES job(job_id)
@@ -486,7 +476,7 @@ class Payroll
             $con->query($deleteEmployeeQuery);
 
             $con->close();
-            header("location:home.php");
+            header("location:home.php#all-emp-tb");
         }
        
     }
@@ -515,11 +505,25 @@ class Payroll
         return($con->query($totalEarningsQuery)->fetch_all()[0]);
     }
 
-    public function changeAccount(){
-        if(isset($_POST['save'])){
-            echo "HEY";
-            exit();
+    public function changeAccount($user, $status){
+        $message = "";
+        $con = $this->connection("root", "");
+        $con->select_db("payroll_crud");
+        extract($_POST);
+        $table = "";
+        
+        $table = $status == "A" ? "admin_account" : "employee_account"; 
+        $updateQuery = "UPDATE `$table` SET password=PASSWORD('$new_pass') WHERE email='$user' AND password=PASSWORD('$old_pass')";
+        $con->query($updateQuery);
+        if($con->affected_rows > 0){
+            $message = "Account updated!";
+            $_SESSION['password'] = $new_pass;
+        } else {
+            $message =  "Old password incorrect!!";
         }
+        return $message;
+        
+       
     }
 }
 $payroll = new Payroll();

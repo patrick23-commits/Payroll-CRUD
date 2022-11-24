@@ -3,17 +3,18 @@ session_start();
 require_once("./payroll.php");
 extract($_GET);
 
-// setlocale(LC_MONETARY, "en_PH");
-// if(isset($_SESSION['username'])===FALSE && isset($_SESSION['password'])===FALSE) {
-//     header("location:login-form.php");
-// } 
-$fetch = $payroll->fetchAllEmployees();
-$totalEarnings = $payroll->fetchTotalEarnings()[1];
-$month = $payroll->fetchTotalEarnings()[0];
+// Redirect in login page if user is not logged in
+if(isset($_SESSION['username'])===FALSE && isset($_SESSION['password'])===FALSE) {
+    header("location:login-form.php");
+} 
 
-$payroll->addEmployee();
+
+
+$fetchEmployee = $payroll->fetchAllEmployees();
+
 $payroll->deleteEmployee();
-$payroll->searchEmployees();    
+$payroll->searchEmployees();   
+//$changeAccountMessage = $payroll->changeAccount($_SESSION['username'], $_SESSION['status']); 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,13 +43,13 @@ $payroll->searchEmployees();
     
     <!-- Page JS -->
     <script src="./js/home.js"></script>
-
     <link rel="shortcut icon" href="./assets/icon.png" type="image/x-icon">
     <link rel="stylesheet" href="./css/home.css">
 
 </head>
 <body>
-    <div class="bg-design"></div>
+    
+   <div class="bg-design"></div>
     <div class="container">
         <div class="panel-left">
             <div class="common-button">
@@ -110,7 +111,7 @@ $payroll->searchEmployees();
                                 <div class="element-header" style="text-align: center;"><h1>Welcome!</h1></div>
                                 <div class="element-body" style="max-width: 200px;">
                                     <div>
-                                        Good day (username)!
+                                        Good day (<?=$_SESSION['username'];?>)!
                                     </div>
                                     <div style="font-weight:bold;"> Quick Help </div>
                                 </div>
@@ -138,20 +139,20 @@ $payroll->searchEmployees();
                                 <div class="element-body" style="justify-content: center;">
                                     <div class="table">
                                         <div class="table-head">
-                                            <?php if($fetch["count"]){ ?>
+                                            <?php if($fetchEmployee["count"]){ ?>
                                                 <span>
                                                     <input type="checkbox" id="cb-head" title="Select All">
                                                     <p> Select All </p>
                                                 </span>
                                             <?php }  ?>
-                                            <button id="btn-refresh-tb" title="Refresh Content"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+                                            <button type="button" id="btn-refresh-tb" title="Refresh Content"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
                                         </div>
                                         <div class="table-body">
                                         <?php
-                                        if($fetch['message']){
-                                            echo $fetch['message'];
+                                        if($fetchEmployee['message']){
+                                            echo $fetchEmployee['message'];
                                         } else {
-                                            foreach($fetch["employees"] as $emp){
+                                            foreach($fetchEmployee["employees"] as $emp){
                                                 $cjobs = [
                                                             "web"=> "#5DADE2",
                                                             "data"=>"#A569BD",
@@ -205,7 +206,7 @@ $payroll->searchEmployees();
                             <button class="block-title-btn" id="account-info-collapse" title="Collapse"><i class="fa-solid fa-chevron-down"></i></button>
                         </div>
                         <div class="block-body">
-                            <form class="element flex-col my-account" method="post">
+                            <form class="element flex-col my-account" method="post" id="changeAccountForm">
                                 <div class="element-header">
                                     <h3>Account Details</h3>
                                 </div>
@@ -214,12 +215,12 @@ $payroll->searchEmployees();
                                         <label for="username">Username</label>
                                         <input name="username" id="username" type="text" value="<?=$_SESSION['username'];?>" readonly>
                                         <label for="old-pass">Old Password</label>
-                                        <input name="old-pass" id="old-pass" type="password" placeholder="Enter Old Password">
+                                        <input name="old_pass" id="old-pass" type="password" placeholder="Enter Old Password">
                                         <label for="new-pass">New Password</label>
-                                        <input name="new-pass" id="new-pass" type="password" placeholder="Enter New Password">
+                                        <input name="new_pass" id="new-pass" type="password" placeholder="Enter New Password">
                                     </div>
                                     <div class="flex-col" style="justify-content: flex-end;">
-                                        <button name="btn-save" id="btn-save" type="submit" title="Save" value="save">
+                                        <button name="btn_save" id="btn-save" type="submit" title="Save" value="save">
                                             <i class="fa-solid fa-floppy-disk"></i> Save
                                         </button>
                                     </div>
@@ -236,7 +237,7 @@ $payroll->searchEmployees();
         </div>
     </div>
     <div id="modal-add-emp" class="modal">
-        <form class="modal-content form-add-new-emp" method="post">
+        <form class="modal-content form-add-new-emp" method="post" id="add_emp">
             <div class="modal-header">
                 <h3 class="title">Add new Employee</h3>
             </div>

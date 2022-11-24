@@ -1,2 +1,6 @@
-#Untracked .txt files
+#Untrack .txt files
 *.txt
+
+
+#Untrack not importnat files
+practice/
