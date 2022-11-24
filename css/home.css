@@ -436,7 +436,7 @@ body {
   text-align: center;
   color: white;
   border-radius: 100px;
-  background-color: #4481eb;
+  background-color: var(--col);
 }
 .container .panel-right .panel-right-body .panel-right-body-content .employee-list .btn-remove-emp,
 .container .panel-right .panel-right-body .panel-right-body-content .employee-list .btn-add-emp {

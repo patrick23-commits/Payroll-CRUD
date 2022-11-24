@@ -140,7 +140,6 @@ class Payroll
             $message = $con->query($employee) === TRUE ?  "$_POST[fullname] added." : "$_POST[fullname] is already exist.";
         }
         $con->close();
-        
         return $message;
     }
 
@@ -159,13 +158,13 @@ class Payroll
                     $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
                     JOIN job    
                     ON employee.job_id = job.job_id
-                    WHERE employee.fullname LIKE '%" . $search . "%'
+                    WHERE employee.fullname LIKE '%$search %'
                     ORDER BY employee.fullname ASC";
                 } else {
                     $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
                     LEFT JOIN job
                     ON employee.job_id = job.job_id
-                    ORDER BY employee.fullname ASC";
+                    ORDER BY job.job_name ASC";
                 }
 
                 $result = $con->query($fetchEmployeesQuery);
@@ -203,7 +202,6 @@ class Payroll
             ORDER BY employee.fullname ASC";
             
             $con->query($fetchEmployeesQuery);
-
         }
         
     }
@@ -443,11 +441,12 @@ class Payroll
         $con->select_db($this->DB_NAME);
         $employee = $this->fetchEmployee($emp_id);
         if ($fullname != $employee['fullname'] || $age != $employee['age'] || $gender != $employee['gender']) {
-            $query = "UPDATE employee SET fullname='$fullname', age='$age', gender='$gender' WHERE emp_id = '$emp_id'";
+            $query = "UPDATE employee SET fullname='$fullname', date_of_birth='$age', gender='$gender' WHERE emp_id = '$emp_id'";
             if ($con->query($query)) {
                 echo "<script>alert('Employee Updated!!')</script>";
             }
         }
+        
         $con->close();
     }
 

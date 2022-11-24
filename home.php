@@ -154,18 +154,19 @@ $payroll->searchEmployees();
                                         } else {
                                             foreach($fetchEmployee["employees"] as $emp){
                                                 $cjobs = [
-                                                            "web"=> "#5DADE2",
-                                                            "data"=>"#A569BD",
-                                                            "mob"=> "#EC7063",
-                                                            "pen"=> "#F39C12",
-                                                            "game"=>"#A6ACAF",
+                                                            "Web Developer"=> "#5DADE2",
+                                                            "Data Scientist"=>"#A569BD",
+                                                            "Mobile Developer"=> "#EC7063",
+                                                            "Penetration Tester"=> "#F39C12",
+                                                            "Game Developer"=>"#A6ACAF",
                                                         ];
                                             ?>
                                                     <div class="emp">
                                                         <div class="check-box">
                                                             <input type="checkbox" name="emp_id[]" class="cb-index" value="<?= $emp['emp_id'] ;?>">
                                                         </div>
-                                                        <a  href="./profile.php?id=<?=  $emp['emp_id'] ;?>" fl="<?=strtoupper($emp['fullname'][0]);?>">
+                                                        <a  href="./profile.php?id=<?=  $emp['emp_id'] ;?>" style="--col:<?=$cjobs[$emp['job_name']];?>" fl="<?=strtoupper($emp['fullname'][0]);?>">
+                                
                                                             <div class="name">
                                                                 <p>
                                                                     <?=$emp['fullname'];?>
