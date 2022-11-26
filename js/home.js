@@ -166,9 +166,7 @@ $(document).ready(()=>{
     $("#date-today").simpleCalendar();
     
     $("#btn-refresh-tb").on("click", ()=>{ 
-        
-        window.location.reload()
-        window.location.href = 'https://localhost' + window.location.pathname + '#all-emp-tb';
+        window.location.href = window.location.href + '#all-emp-tb';
 
     })
 
@@ -214,7 +212,7 @@ $(document).ready(()=>{
                     case "added.":
                         window.location.reload()
                         alert(alertMessage)
-                        window.location.href = 'https://localhost' + window.location.pathname + '#all-emp-tb';
+                        window.location.href = window.location.href + '#all-emp-tb';
                         break
                     default:
                         alert(alertMessage)
@@ -241,6 +239,9 @@ $(document).ready(()=>{
                             $("#old-pass").css({border : "1px solid red"})
                             $("#new-pass").val("")
                             break
+                        default : 
+                            $("#old-pass").val("")
+                            $("#new-pass").val("")
                     }
                     
                 }

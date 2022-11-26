@@ -130,14 +130,32 @@ class Payroll
     }
     public function addEmployee()
     {
-        $message = "";
+        
         extract($_POST);
+        $message = "";
         $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
+        
+        $fetchCurrentEmpId = "SELECT AUTO_INCREMENT AS auto_ FROM
+        information_schema.TABLES
+        WHERE TABLE_SCHEMA = 'payroll_crud' 
+        AND TABLE_NAME = 'employee'";
+
+        $res = $con->query($fetchCurrentEmpId);
+        $id = $res->fetch_assoc()["auto_"];
+        
         if (!$con->connect_error) {
             $employee = "INSERT INTO employee (`fullname`, `date_of_birth`, `gender`, `job_id`) VALUES ('$fullname', '$bday', '$gender', $department)";
             
-            $message = $con->query($employee) === TRUE ?  "$_POST[fullname] added." : "$_POST[fullname] is already exist.";
+            
+            $employeeAccount = "INSERT INTO employee_account (emp_id, email, password, status) 
+                                SELECT emp_id, CONCAT_WS('-', YEAR(NOW()), emp_id) AS email, 
+                                PASSWORD(CONCAT_WS('-', YEAR(NOW()), emp_id)) AS password, 
+                                'E' AS status 
+                                FROM employee WHERE emp_id = $id";
+
+            $message = ($con->query($employee) === TRUE) && ($con->query($employeeAccount)) ?  "$_POST[fullname] added." : "$_POST[fullname] is already exist.";
+
         }
         $con->close();
         return $message;
@@ -152,6 +170,9 @@ class Payroll
         $employees = array();
         $con = $this->connection("root","");
         $con->select_db($this->DB_NAME);
+
+        
+
         if (!$con->connect_error) {
             if ($_SERVER['REQUEST_METHOD'] == "GET") {
                 if(isset($search)){
@@ -164,7 +185,7 @@ class Payroll
                     $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
                     LEFT JOIN job
                     ON employee.job_id = job.job_id
-                    ORDER BY job.job_name ASC";
+                    ORDER BY job.job_name, employee.fullname ASC";
                 }
 
                 $result = $con->query($fetchEmployeesQuery);
@@ -187,6 +208,8 @@ class Payroll
         $con->close();
         return array("employees"=>$employees, "count"=>count($employees), "message"=>$message);
     }
+    
+
 
     // public function searchEmployees(){
     // extract($_GET);
@@ -266,6 +289,9 @@ class Payroll
         )";
         $con->query($createTableEmployeeQuery);
 
+        //Set the increment value of the emp_id in 10000
+        $alterEmployee = "ALTER TABLE employee AUTO_INCREMENT = 10000";
+        $con->query($alterEmployee);
 
         $createEmployeeAccount = "CREATE TABLE employee_account (account_id INTEGER PRIMARY KEY AUTO_INCREMENT,
                             emp_id INT NOT NULL,
