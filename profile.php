@@ -81,10 +81,19 @@ $tax = $payroll->fetchTax();
                                     <div class="input-tag-content">
                                         <div class="input-label">Age</div>
                                         <div class="input-value">
-                                            <input type="text" name="age" placeholder="Age" value="<?= $employee['age'];?>" style="width:50px;"> 
+                                            <input type="text" name="age" placeholder="Age" value="<?= $employee['age'];?>" style="width:50px;" readonly> 
                                         </div>
                                     </div>
                                 </div>
+                                <div class="input-tag">
+                                    <div class="input-tag-content">
+                                        <div class="input-label">Birthdate</div>
+                                        <div class="input-value">
+                                            <input type="date" name="bdate" placeholder="Birthdate" value="<?= $employee['date_of_birth'];?>" style="width:50px;"> 
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <div class="combo-box">
                                     <select name="gender" id="" class="combo-box-gender">
                                         <option value="Male" <?=$employee['gender'] == 'Male' ? 'selected' :NULL ;?>>Male</option>

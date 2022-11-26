@@ -246,7 +246,7 @@ $payroll->deleteEmployee();
                 <input name="fullname" id="full-name" type="text" placeholder="Full Name">
 
                 <label for="bday">Enter birth date</label>
-                <input name="bday" id="bday" type="date" placeholder="Birth Date">
+                <input name="bday" id="bday" type="date" placeholder="Birth Date" value="2020-10-10">
 
                 <label for="gender">Enter gender</label>
                 <select name="gender" id="gender">

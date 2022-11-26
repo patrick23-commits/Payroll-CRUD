@@ -166,7 +166,8 @@ $(document).ready(()=>{
     $("#date-today").simpleCalendar();
     
     $("#btn-refresh-tb").on("click", ()=>{ 
-        window.location.href = window.location.href + '#all-emp-tb';
+        window.location.reload()
+        window.location.href = window.location.pathname + '#all-emp-tb';
 
     })
 
@@ -211,8 +212,8 @@ $(document).ready(()=>{
                 switch(messageAction) {
                     case "added.":
                         window.location.reload()
+                        window.location.href = window.location.pathname + '#all-emp-tb';
                         alert(alertMessage)
-                        window.location.href = window.location.href + '#all-emp-tb';
                         break
                     default:
                         alert(alertMessage)

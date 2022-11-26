@@ -235,7 +235,7 @@ class Payroll
         $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
         if (!$con->connect_error) {
-            $fetchEmployeeQuery = "SELECT employee.emp_id,employee.fullname, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),employee.date_of_birth)), '%Y') + 0 AS age,employee.gender,
+            $fetchEmployeeQuery = "SELECT employee.emp_id,employee.fullname, employee.date_of_birth, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),employee.date_of_birth)), '%Y') + 0 AS age,employee.gender,
                                     job.job_name, job.salary_range
                                     FROM employee
                                     LEFT JOIN job
@@ -462,14 +462,14 @@ class Payroll
     {
         $emp_id = $_POST['emp_id'];
         $fullname = $_POST['fullname'];
-        $age = $_POST['age'];
+        $bdate = $_POST['bdate'];
         $gender = $_POST['gender'];
 
         $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
         $employee = $this->fetchEmployee($emp_id);
-        if ($fullname != $employee['fullname'] || $age != $employee['age'] || $gender != $employee['gender']) {
-            $query = "UPDATE employee SET fullname='$fullname', date_of_birth='$age', gender='$gender' WHERE emp_id = '$emp_id'";
+        if ($fullname != $employee['fullname'] || $bdate != $employee['date_of_birth'] || $gender != $employee['gender']) {
+            $query = "UPDATE employee SET fullname='$fullname', date_of_birth='$bdate', gender='$gender' WHERE emp_id = '$emp_id'";
             if ($con->query($query)) {
                 echo "<script>alert('Employee Updated!!')</script>";
             }
