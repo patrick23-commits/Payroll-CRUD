@@ -144,7 +144,7 @@ body {
   margin-bottom: 30px;
 }
 .container .panel-right {
-  margin-left: 60px;
+  margin-left: 50px;
   width: 100%;
   padding: 10px;
   display: flex;
@@ -376,16 +376,25 @@ body {
   background-color: #3a72d3;
 }
 .container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .table-body {
-  padding: 20px;
+  padding: 10px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: stretch;
   flex-wrap: nowrap;
   flex-wrap: wrap;
-  row-gap: 10px;
+  gap: 10px;
   -moz-column-gap: 50px;
        column-gap: 50px;
+}
+.container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .table-body .wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  gap: 10px;
+  width: 300px;
 }
 .container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .table-body .emp {
   display: flex;
@@ -418,6 +427,7 @@ body {
   color: black;
   text-decoration: none;
   transition: 0.3s;
+  width: 100%;
 }
 .container .panel-right .panel-right-body .panel-right-body-content .employee-list .table .table-body .emp a .name p {
   font-weight: bold;
@@ -616,6 +626,7 @@ body {
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
+  height: 10px;
 }
 
 /* Track */
