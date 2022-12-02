@@ -124,7 +124,7 @@ body{
         }
     }
     .panel-right{
-        margin-left: 60px;
+        margin-left: 50px;
         width: 100%;
         padding: 10px;
         @include flex-body(column);
@@ -299,11 +299,17 @@ body{
                             }
                         }
                         .table-body{
-                            padding: 20px;
+                            padding: 10px;
                             @include flex-body(row);
                             flex-wrap: wrap;
-                            row-gap: 10px;
+                            gap: 10px;
+                            // row-gap: 10px;
                             column-gap: 50px;
+                            .wrap{
+                                @include flex-body(column);
+                                gap: 10px;
+                                width: 300px;
+                            }
                             .emp{
                                 @include flex-body(row, center, center);
                                 justify-content: flex-start;
@@ -328,6 +334,7 @@ body{
                                     color: black;
                                     text-decoration: none;
                                     transition: .3s;
+                                    width: 100%;
                                     .name{
                                         p{
                                             font-weight: bold;
@@ -542,6 +549,7 @@ body{
 /* width */
 ::-webkit-scrollbar {
     width: 10px;  
+    height: 10px;
 }
   
 /* Track */
