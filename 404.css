@@ -33,6 +33,7 @@ nav button {
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 1px;
+  border-radius: 5px;
   box-shadow: 2px 2px 15px rgba(0,0,0,0.5);
 }
 .page-not-found img{
@@ -80,6 +81,7 @@ nav button {
   outline: none;
   border: none;
   letter-spacing: 1px;
+  border-radius: 5px;
   box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.1);
 }
 button:hover {
