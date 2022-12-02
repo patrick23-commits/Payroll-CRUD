@@ -5,14 +5,13 @@
     if(isset($_SESSION['username']) && isset($_SESSION['password'])) {
       if($_SESSION['status'] === "A")
           header("location:home.php");
+      else
+        header("Location:employee.php");
     }
 
     if(isset($_POST['login'])) {
       $payroll->setUserInfo();
-    }
-
-    
-  
+    }  
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,20 +19,24 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- JQuery -->
+  <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
   <script 
     src="https://kit.fontawesome.com/64d58efce2.js"
     crossorigin="anonymous"
   ></script>
   <link rel="icon" type="image/x-icon" href="./assets/icon.png">
   <link rel="stylesheet" href="./css/login-form.css">
+  <link rel="stylesheet" href="./css/modal.css">
   <title>Payroll System | Login</title>
 </head>
 <body>
   <?php 
     if(isset($_GET['error'])){
-  ?>
-    <h1 style="z-index: 100; position : absolute; margin : auto;"><?=$_GET['error'];?></h1>
-  <?php
+      include_once("./modal.php");
     }
   ?>
   <div class="container">

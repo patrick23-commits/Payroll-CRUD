@@ -4,7 +4,7 @@ require_once("./payroll.php");
 extract($_GET);
 
 // Redirect in login page if user is not logged in
-if (isset($_SESSION['username']) === FALSE && isset($_SESSION['password']) === FALSE) {
+if (isset($_SESSION['username']) === FALSE && isset($_SESSION['password']) === FALSE || $_SESSION['status'] != "A") {
     header("location:login-form.php");
 }
 
@@ -81,7 +81,7 @@ $payroll->deleteEmployee();
                 </div>
             </div>
             <div class="panel-left-footer">
-                <button id="btn-logout" title="Logout">
+                <button id="btn-logout" title="Logout" type="button">
                     <i class="fa-solid fa-arrow-right-to-bracket"></i>
                     <p>Logout</p>
                 </button>

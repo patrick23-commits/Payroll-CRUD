@@ -1,4 +1,7 @@
 <?php
+
+use LDAP\Result;
+
 class Payroll
 {
     private $DB_NAME = "payroll_crud";
@@ -106,14 +109,13 @@ class Payroll
         $_SESSION['username'] = $this->username;
         $_SESSION['password'] = $this->password;
         $_SESSION['status'] = $result->fetch_assoc()["status"];
-       
         
         $script = "<script> 
                     alert('$_SESSION[username] connected successfuly!');\n";
         if ($databaseMessage) {
             $script .= "alert(' " . $databaseMessage . "')\n";
         }
-        $script .= "window.location.href = 'https://localhost' + window.location.pathname";
+        $script .= $_SESSION['status'] == "A" ?  "window.location.href = 'https://localhost' + window.location.pathname" : "window.location.href = 'https://localhost' + '/Payroll-CRUD/employee.php'";
         $script .= "</script>";
 
         echo $script;
@@ -549,8 +551,40 @@ class Payroll
             $message =  "Old password incorrect!!";
         }
         return $message;
-        
        
+    }
+
+    public function fetchAllPayslipsOrAttendance($tableName){
+        $con = $this->connection("root", "");
+        $con->select_db("payroll_crud");
+        
+          
+        $query = "SELECT * FROM $tableName WHERE emp_id = (SELECT emp_id from employee_account WHERE email = '$_SESSION[username]') ORDER BY from_ DESC";
+
+        $result = $con->query($query);
+        $con->close();
+        return $result->fetch_all();
+        
+
+    }
+
+    public function fetchEmployeePayslip($id) {
+        if($id){
+        $con = $this->connection("root", "");
+        $con->select_db("payroll_crud");
+        $query = "SELECT *, tax.sss + tax.pagibig + tax.philhealth AS 'Deduction' FROM payroll
+        JOIN job USING (job_id)
+        JOIN employee USING(emp_id)
+        JOIN salary USING (salary_id)
+        JOIN tax
+        JOIN attendance USING (attendance_id)
+        WHERE payroll.emp_id = (SELECT emp_id from employee_account WHERE email = '$_SESSION[username]') AND payroll.payroll_id = $id";
+
+        $result = $con->query($query)->fetch_assoc();
+        $con->close();
+        return  $result ? $result : header("Location:employee.php");
+        }
+        header("Location:employee.php");
     }
 }
 $payroll = new Payroll();

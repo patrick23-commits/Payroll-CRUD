@@ -1,24 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="modal.css">
-  <title>Modal</title>
-</head>
-<body>
-  <div class="main">
-    <a href="#modal" id="btn" class="btn">Show modal</a>
-  </div>
 
   <div id="modal" class="modal">
-    <div class="content">
-      <a href="/" class="close">&Cross;</a>
-      <h2>User Not Found</h2>
-      <img src="img/ex.svg">
-      <button class="btn">Click me</button>
+    <div class="modal-content">
+      <button class="modal-close" id="close">&Cross;</button>
+      <h2 class="modal-h2"><?=strtoupper($_GET['error']);?></h2>
+      <img class="modal-img" src="img/ex.svg">
     </div>
   </div>
-</body>
-</html>
+
+  <style>
+  .modal {
+    opacity: 1;
+    visibility: visible;
+  }
+  .modal .modal-content {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  </style>
+
+  <script>
+    $("#close").on("click", ()=>{
+      $("#modal").remove()
+    })
+  </script>
+
+

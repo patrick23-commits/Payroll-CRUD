@@ -1,0 +1,72 @@
+.invoice-box{
+    max-width: 800px;
+    margin: auto;
+    padding: 30px;
+    background: rgb(246, 246, 247);
+    border: 1px solid rgb(24, 20, 20);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    font-size: 20px;
+    line-height: 24px;
+    font-family: Arial, sans-serif;
+    background-image: url('logo.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+.invoice-box h4{
+    font-size: 38px;
+    font-weight: 500;
+    margin-bottom: 60px;
+}
+
+.invoice-box table{
+    width: 100%;
+    line-height: inherit;
+    text-align: left;
+}
+.invoice-box table td{
+    padding: 5px;
+    vertical-align: top;
+}
+.invoice-box table tr td:nth-child(2)
+{
+    text-align: right;
+}
+.invoice-box tr.top table td
+{
+    padding-bottom: 20px;
+}
+.invoice-box table tr.information table td
+{
+    padding-bottom: 60px;
+}
+.invoice-box table tr.heading td
+{
+    background: rgb(52, 193, 240);
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.5s, background 0.5s;
+}
+.invoice-box table tr.details td
+{
+    padding-bottom: 35px;
+    border-bottom: 1px solid rgb(29, 27, 27);
+    cursor: pointer;
+}
+.invoice-box table tr.heading td:hover{
+    background: rgb(51, 175, 233);
+    color: #fff;
+    transform: scale(1.05);
+}
+.invoice-box table tr.heading td:hover i{
+   color: #fff;
+}
+.invoice-box table footer > td{
+    color: var(--primary);
+    text-decoration: underline;
+    font-size: 13px;
+    padding-bottom: 3px;
+}
+.invoice-box .footer .terms .tc{
+    font-size: 16px;
+}
