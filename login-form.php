@@ -1,17 +1,18 @@
 <?php
-    require_once("./payroll.php");
     session_start();
-    error_reporting(0);
+    require_once("./payroll.php");
+    
     if(isset($_SESSION['username']) && isset($_SESSION['password'])) {
       if($_SESSION['status'] === "A")
           header("location:home.php");
-      else
-        null;
     }
+
     if(isset($_POST['login'])) {
-      echo $payroll->createUser();
       $payroll->setUserInfo();
     }
+
+    
+  
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,9 +24,9 @@
     src="https://kit.fontawesome.com/64d58efce2.js"
     crossorigin="anonymous"
   ></script>
-  <link rel="icon" type="image/x-icon" href="https://img.freepik.com/free-vector/illustration-circle-stamp-banner-vector_53876-27183.jpg?w=2000">
-  <link rel="stylesheet" href="login-form.css">
-  <title>Login</title>
+  <link rel="icon" type="image/x-icon" href="./assets/icon.png">
+  <link rel="stylesheet" href="./css/login-form.css">
+  <title>Payroll System | Login</title>
 </head>
 <body>
   <?php 

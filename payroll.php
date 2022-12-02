@@ -5,6 +5,17 @@ class Payroll
     private $username = "";
     private $password = "";
 
+
+    public function connection($username, $password)
+    {
+    
+        $con = new mysqli("localhost", $username, $password);
+        if ($con->connect_error) {
+            exit();
+        }
+        return $con;
+    }
+
     public function createDatabase()
     {
         $isDatabaseExist = FALSE;
@@ -50,15 +61,7 @@ class Payroll
         $this->password = $_POST['password'];
         $this->login($this->username, $this->password);
     }
-    public function connection($username, $password)
-    {
     
-        $con = new mysqli("localhost", $username, $password);
-        if ($con->connect_error) {
-            exit();
-        }
-        return $con;
-    }
     public function createUser()
     {
         
@@ -75,8 +78,20 @@ class Payroll
     {   
        
         $con = $this->connection("root", "");
-        $con->select_db("payroll_crud");
+        
         $databaseMessage = $this->createDatabase();
+        $con->select_db("payroll_crud");
+
+        if(!$this->tablesCreated()){
+            $this->createTables();
+            echo "<script>
+                alert('Tables employee, salary, attendance, tax, job and payroll are successfully created!');
+            </script>";
+            $this->insertAdmin('admin', 'admin');
+        }
+        
+        
+
         $selectAccount = "SELECT * FROM (
                         SELECT email,password,status from admin_account
                         UNION ALL
@@ -88,7 +103,6 @@ class Payroll
             header("Location:login-form.php?error=user not found"); 
             exit();
         }
-    
         $_SESSION['username'] = $this->username;
         $_SESSION['password'] = $this->password;
         $_SESSION['status'] = $result->fetch_assoc()["status"];
@@ -99,8 +113,8 @@ class Payroll
         if ($databaseMessage) {
             $script .= "alert(' " . $databaseMessage . "')\n";
         }
-        $script .= "window.location.href = 'https://localhost' + window.location.pathname;
-        </script>";
+        $script .= "window.location.href = 'https://localhost' + window.location.pathname";
+        $script .= "</script>";
 
         echo $script;
 
@@ -109,77 +123,119 @@ class Payroll
 
     public function logout()
     {
-        $_SESSION['username'] = null;
-        $_SESSION['password'] = null;
+        session_start();
+        session_destroy();
+        
         header("location:login-form.php");
     }
     public function addEmployee()
     {
-        $con = $this->connection($_SESSION['username'], $_SESSION['password']);
+        
+        extract($_POST);
+        $message = "";
+        $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
+        
+        $fetchCurrentEmpId = "SELECT AUTO_INCREMENT AS auto_ FROM
+        information_schema.TABLES
+        WHERE TABLE_SCHEMA = 'payroll_crud' 
+        AND TABLE_NAME = 'employee'";
+
+        $res = $con->query($fetchCurrentEmpId);
+        $id = $res->fetch_assoc()["auto_"];
+        
         if (!$con->connect_error) {
-            $employee = "INSERT INTO employee (`fullname`, `age`, `gender`, `job_id`) VALUES ('$_POST[fullname]', $_POST[age], '$_POST[gender]', $_POST[job_id])";
-            if ($con->query($employee) === TRUE) {
-                echo "<script> 
-                        window.location.href = 'https://localhost' + window.location.pathname ;
-                        alert('$_POST[fullname] added.') 
-                        </script>";
-            } else {
-                echo "<script> 
-                        window.location.href = 'https://localhost'  + window.location.pathname ;
-                        alert('$_POST[fullname] is already exist.');
-                    </script>";
-            }
+            $employee = "INSERT INTO employee (`fullname`, `date_of_birth`, `gender`, `job_id`) VALUES ('$fullname', '$bday', '$gender', $department)";
+            
+            
+            $employeeAccount = "INSERT INTO employee_account (emp_id, email, password, status) 
+                                SELECT emp_id, CONCAT_WS('-', YEAR(NOW()), emp_id) AS email, 
+                                PASSWORD(CONCAT_WS('-', YEAR(NOW()), emp_id)) AS password, 
+                                'E' AS status 
+                                FROM employee WHERE emp_id = $id";
+
+            $message = ($con->query($employee) === TRUE) && ($con->query($employeeAccount)) ?  "$_POST[fullname] added." : "$_POST[fullname] is already exist.";
+
         }
         $con->close();
+        return $message;
     }
 
     public function fetchAllEmployees()
     {
+        extract($_GET);
+        
         $fetchEmployeesQuery = "";
+        $message = "";
         $employees = array();
         $con = $this->connection("root","");
         $con->select_db($this->DB_NAME);
+
+        
+
         if (!$con->connect_error) {
             if ($_SERVER['REQUEST_METHOD'] == "GET") {
-                $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
-                LEFT JOIN job
-                ON employee.job_id = job.job_id
-                ORDER BY employee.fullname ASC";
-            } else {
-                if (isset($_POST['search'])) {
+                if(isset($search)){
                     $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
                     JOIN job    
                     ON employee.job_id = job.job_id
-                    WHERE employee.fullname LIKE '%" . $_POST['search_name'] . "%'
+                    WHERE employee.fullname LIKE '%$search%'
                     ORDER BY employee.fullname ASC";
-                }
-            }
-
-            $result = $con->query($fetchEmployeesQuery);
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    array_push($employees, $row);
-                }
-            } else {
-                if ($_SERVER['REQUEST_METHOD'] == "GET" || ($_SERVER['REQUEST_METHOD'] == "POST" && $result->num_rows == 0 && !isset($_POST['search']))) {
-                    echo "<h1>No Employee!!</h1>";
                 } else {
-                    if (isset($_POST['search']))
-                        echo "<h1>No result for Employee '$_POST[search_name]'</h1>";
+                    $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
+                    LEFT JOIN job
+                    ON employee.job_id = job.job_id
+                    ORDER BY job.job_name, employee.fullname ASC";
                 }
-            }
+
+                $result = $con->query($fetchEmployeesQuery);
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        array_push($employees, $row);
+                    }
+                } else {
+                    if ($_SERVER['REQUEST_METHOD'] == "GET" && isset($search)) {
+                        $message = "<p style='margin: 10px 0; font-size: large;'><i class='fa-regular fa-face-frown'></i> No employee named '$search'</p>";
+                    } else {
+                        $message =  "<p style='margin: 10px 0; font-size: large;'><i class='fa-solid fa-clipboard-list'></i> Employee List is empty.</p>";
+                    }
+                }
+                
+            } 
+
+
         }
         $con->close();
-        return $employees;
+        return array("employees"=>$employees, "count"=>count($employees), "message"=>$message);
     }
+    
+
+
+    // public function searchEmployees(){
+    // extract($_GET);
+    // $employees = array();
+    // $con = $this->connection("root", "");
+    // $con->select_db($this->DB_NAME);
+    // if($_SERVER['REQUEST_METHOD'] == "GET"){
+    //     if (isset($search)) {
+    //         $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
+    //         JOIN job    
+    //         ON employee.job_id = job.job_id
+    //         WHERE employee.fullname LIKE '%" . $search . "%'
+    //         ORDER BY employee.fullname ASC";
+            
+    //         $con->query($fetchEmployeesQuery);
+    //     }
+        
+    // }
+    // }
 
     public function fetchEmployee($emp_id)
     {
-        $con = $this->connection($_SESSION['username'], $_SESSION['password']);
+        $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
         if (!$con->connect_error) {
-            $fetchEmployeeQuery = "SELECT employee.emp_id,employee.fullname, employee.age,employee.gender,
+            $fetchEmployeeQuery = "SELECT employee.emp_id,employee.fullname, employee.date_of_birth, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),employee.date_of_birth)), '%Y') + 0 AS age,employee.gender,
                                     job.job_name, job.salary_range
                                     FROM employee
                                     LEFT JOIN job
@@ -193,7 +249,7 @@ class Payroll
 
     public function fetchTax()
     {
-        $con = $this->connection($_SESSION['username'], $_SESSION['password']);
+        $con = $this->connection("root","");
         $con->select_db($this->DB_NAME);
         if (!$con->connect_error) {
             $fetchTaxQuery = "SELECT * FROM tax";
@@ -206,41 +262,43 @@ class Payroll
     public function createTables()
     {
         $con = $this->connection("root", "");
-        $con->select_db($this->DB_NAME);
+        $con->select_db("payroll_crud");
 
-        $createAdminAccount = "CREATE TABLE admin_account (account_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        $createAdminAccount = "CREATE TABLE admin_account (account_id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
                             email TEXT NOT NULL UNIQUE,
                             password TEXT NOT NULL,
                             status CHAR
                         )";
         $con->query($createAdminAccount);
-
-        
+            
         $createTableJobQuery = "CREATE TABLE job (
                                 job_id int PRIMARY KEY AUTO_INCREMENT,
                                 job_name varchar(25) UNIQUE,
                                 salary_range bigint
-                            );";
+                            )";
 
         $con->query($createTableJobQuery);
 
         $createTableEmployeeQuery = "CREATE TABLE employee (
             emp_id int PRIMARY KEY AUTO_INCREMENT,
             fullname varchar(50) NOT NULL UNIQUE,
-            age INT NOT NULL,
+            date_of_birth DATE NOT NULL,
             gender varchar(6) NOT NULL,
             job_id INT NOT NULL,
             FOREIGN KEY(job_id) REFERENCES job(job_id)
-        );";
+        )";
         $con->query($createTableEmployeeQuery);
 
+        //Set the increment value of the emp_id in 10000
+        $alterEmployee = "ALTER TABLE employee AUTO_INCREMENT = 10000";
+        $con->query($alterEmployee);
 
         $createEmployeeAccount = "CREATE TABLE employee_account (account_id INTEGER PRIMARY KEY AUTO_INCREMENT,
                             emp_id INT NOT NULL,
                             email TEXT NOT NULL,
                             password TEXT NOT NULL,
                             status CHAR,
-                            FOREIGN KEY(emp_id) REFERENCES employee(emp_id)
+                            FOREIGN KEY(emp_id) REFERENCES employee(emp_id) 
                         )";
         $con->query($createEmployeeAccount);
 
@@ -301,13 +359,15 @@ class Payroll
         
     }
 
-    public function insertAdmin() {
+    public function insertAdmin($uname, $pass) {
         $con = $this->connection("root", "");
         $con->select_db("payroll_crud");
 
-        $insertAdminQuery = "INSERT INTO admin_account (`email`,`password`,`status`) VALUES ('admin', PASSWORD('admin'), 'A')";
+        $insertAdminQuery = "INSERT INTO admin_account (`email`,`password`,`status`) VALUES('$uname', PASSWORD('$pass'), 'A')";
+                            // -- SELECT 'admin', PASSWORD('admin'), 'A' FROM dual 
+                            // -- WHERE NOT EXISTS 
+                            // -- (SELECT * FROM admin_account WHERE email='admin')";
         $con->query($insertAdminQuery);
-        
         $con->close();
     }
     public function insertDepartmentAndDeduction()
@@ -402,29 +462,37 @@ class Payroll
     {
         $emp_id = $_POST['emp_id'];
         $fullname = $_POST['fullname'];
-        $age = $_POST['age'];
+        $bdate = $_POST['bdate'];
         $gender = $_POST['gender'];
 
         $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
         $employee = $this->fetchEmployee($emp_id);
-        if ($fullname != $employee['fullname'] || $age != $employee['age'] || $gender != $employee['gender']) {
-            $query = "UPDATE employee SET fullname='$fullname', age='$age', gender='$gender' WHERE emp_id = '$emp_id'";
+        if ($fullname != $employee['fullname'] || $bdate != $employee['date_of_birth'] || $gender != $employee['gender']) {
+            $query = "UPDATE employee SET fullname='$fullname', date_of_birth='$bdate', gender='$gender' WHERE emp_id = '$emp_id'";
             if ($con->query($query)) {
                 echo "<script>alert('Employee Updated!!')</script>";
             }
         }
+        
         $con->close();
     }
 
     public function deleteEmployee()
     {
+        extract($_POST);
         $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
-        if (isset($_POST['emp_id'])) {
-            $id = join(", ", $_POST['emp_id']);
+        
+        if(isset($delete) && isset($emp_id)){
+            $id = join(", ", $emp_id);
+            
+            $deleteEmployeeAccount = "DELETE FROM employee_account WHERE emp_id IN ($id)";
+            $con->query($deleteEmployeeAccount);
+
             $deletePayrollQuery = "DELETE FROM payroll WHERE emp_id IN ($id)";
             $con->query($deletePayrollQuery);
+
             $deleteAttendanceQuery = "DELETE FROM attendance WHERE emp_id IN ($id)";
             $con->query($deleteAttendanceQuery);
 
@@ -433,8 +501,56 @@ class Payroll
 
             $deleteEmployeeQuery = "DELETE FROM employee WHERE emp_id IN ($id) ";
             $con->query($deleteEmployeeQuery);
-            header("location:home.php");
+
+            $con->close();
+            header("location:home.php#all-emp-tb");
         }
+       
+    }
+
+    public function fetchNumberOfEmployeesPerDepartment(){
+        $con = $this->connection("root","");
+        $con->select_db("payroll_crud");
+
+        $query = "SELECT count(fullname) as 'quantity', job_name FROM employee
+                    RIGHT JOIN job
+                    USING(job_id)
+                    GROUP BY job_id";
+
+        $result = $con->query($query);
+
+        return $result->fetch_all();       
+    }
+    
+    public function fetchTotalEarnings() {
+        $con = $this->connection("root", "");
+        $con->select_db("payroll_crud");
+
+        $totalEarningsQuery = "SELECT MONTHNAME(from_) as 'month', ROUND(SUM(net_pay),2) as 'total_earnings' 
+                                    from salary
+                                    where MONTHNAME(from_) = MONTHNAME(CURRENT_DATE)";
+        return($con->query($totalEarningsQuery)->fetch_all()[0]);
+    }
+
+    public function changeAccount($user, $status){
+        $message = "";
+        $con = $this->connection("root", "");
+        $con->select_db("payroll_crud");
+        extract($_POST);
+        $table = "";
+        
+        $table = $status == "A" ? "admin_account" : "employee_account"; 
+        $updateQuery = "UPDATE `$table` SET password=PASSWORD('$new_pass') WHERE email='$user' AND password=PASSWORD('$old_pass')";
+        $con->query($updateQuery);
+        if($con->affected_rows > 0){
+            $message = "Account updated!";
+            $_SESSION['password'] = $new_pass;
+        } else {
+            $message =  "Old password incorrect!!";
+        }
+        return $message;
+        
+       
     }
 }
 $payroll = new Payroll();

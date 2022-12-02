@@ -1,8 +1,6 @@
 <?php
 session_start();
 require_once("./payroll.php");
-$rand = floor(microtime(true) * 1000);
-$_SESSION['sec'] = floor(microtime(true) * 1000);
 $GLOBALS['employee'] = $payroll->fetchEmployee($_GET['id']);
 if(!(isset($_SESSION['username']) && isset($_SESSION['password']))) {
     header("location:login.php");
@@ -26,7 +24,7 @@ $tax = $payroll->fetchTax();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
 
-    <link rel="icon" type="image/x-icon" href="https://img.freepik.com/free-vector/illustration-circle-stamp-banner-vector_53876-27183.jpg?w=2000">
+    <link rel="shortcut icon" href="./assets/icon.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
 
     <!-- FontAwsome -->
@@ -38,7 +36,7 @@ $tax = $payroll->fetchTax();
             <div class="navigator">
                 <a class="title" href="home.php">
                     <div class="logo"> 
-                        <img src="https://img.freepik.com/free-vector/illustration-circle-stamp-banner-vector_53876-27183.jpg?w=2000"> 
+                        <img src="./assets/icon.png"> 
                     </div>
                     <div> PAYROLL SYSTEM </div>
                 </a>
@@ -83,10 +81,19 @@ $tax = $payroll->fetchTax();
                                     <div class="input-tag-content">
                                         <div class="input-label">Age</div>
                                         <div class="input-value">
-                                            <input type="text" name="age" placeholder="Age" value="<?= $employee['age'];?>" style="width:50px;"> 
+                                            <input type="text" name="age" placeholder="Age" value="<?= $employee['age'];?>" style="width:50px;" readonly> 
                                         </div>
                                     </div>
                                 </div>
+                                <div class="input-tag">
+                                    <div class="input-tag-content">
+                                        <div class="input-label">Birthdate</div>
+                                        <div class="input-value">
+                                            <input type="date" name="bdate" placeholder="Birthdate" value="<?= $employee['date_of_birth'];?>" style="width:50px;"> 
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <div class="combo-box">
                                     <select name="gender" id="" class="combo-box-gender">
                                         <option value="Male" <?=$employee['gender'] == 'Male' ? 'selected' :NULL ;?>>Male</option>
@@ -258,4 +265,4 @@ $tax = $payroll->fetchTax();
 <script src="//code.jquery.com/jquery-1.12.4.js"></script>
 <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<script src="script.js"></script>
+<script src="./js/script.js"></script>

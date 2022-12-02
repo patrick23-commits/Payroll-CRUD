@@ -1,3 +1,10 @@
 #Untracked .txt files
 *txt
 practice/
+#Untrack .txt files
+*.txt
+
+
+#Untrack not importnat files
+practice/
+.vscode/
