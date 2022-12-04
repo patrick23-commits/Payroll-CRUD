@@ -6,7 +6,7 @@
       if($_SESSION['status'] === "A")
           header("location:home.php");
       else
-        header("Location:employee.php");
+        header("Location:employee/employee.php");
     }
 
     if(isset($_POST['login'])) {

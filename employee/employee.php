@@ -1,8 +1,8 @@
 <?php
 session_start();
-require_once("./payroll.php");
+require_once("../payroll.php");
 if ( $_SESSION['status'] != "E") {
-  header("location:login-form.php");
+  header("location:../login-form.php");
 }
 ?>
 <!DOCTYPE html>
@@ -11,7 +11,8 @@ if ( $_SESSION['status'] != "E") {
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./css/employee.css" />
+    <link rel="stylesheet" href="../css/employee.css" />
+    <link rel="shortcut icon" href="../assets/icon.png" type="image/x-icon">
     <!-- Font Awesome Cdn Link -->
     <link
       rel="stylesheet"
@@ -25,24 +26,24 @@ if ( $_SESSION['status'] != "E") {
         <ul>
           <li>
             <a href="#" class="logo">
-              <img src="./assets/icon.png" />
+              <img src="../assets/icon.png" />
               <span class="nav-item">Payroll System</span>
             </a>
           </li>
           <li>
-            <a href="employee.php">
+            <a href="./employee.php">
               <i class="fas fa-database"></i>
               <span class="nav-item">Payslip</span>
             </a>
           </li>
           <li>
-            <a href="attendance.php">
+            <a href="./attendance.php">
               <i class="fas fa-chart-bar"></i>
               <span class="nav-item">Attendance</span>
             </a>
           </li>
           <li>
-            <a href="./logout.php" id="bottom" class="logout">
+            <a href="../logout.php" id="bottom" class="logout">
               <i class="fas fa-sign-out-alt"></i>
               <span class="nav-item">Log Out</span>
             </a>
@@ -62,7 +63,7 @@ if ( $_SESSION['status'] != "E") {
                         </thead>
                         <tbody>
                           <?php
-                            foreach($payroll->fetchAllPayslipsOrAttendance("payroll") as $row){
+                            foreach($payroll->fetchAllPayslipsOrAttendance("payslip") as $row){
                           ?>
 
                           <tr>

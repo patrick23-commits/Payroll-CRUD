@@ -44,7 +44,7 @@ class Payroll
     }
     public function tablesCreated()
     {
-        $tables = ["job", "employee", "attendance", "tax", "salary", "payroll"];
+        $tables = ["job", "employee", "attendance", "tax", "salary", "payslip"];
         $count = 0;
         $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
@@ -115,7 +115,7 @@ class Payroll
         if ($databaseMessage) {
             $script .= "alert(' " . $databaseMessage . "')\n";
         }
-        $script .= $_SESSION['status'] == "A" ?  "window.location.href = 'https://localhost' + window.location.pathname" : "window.location.href = 'https://localhost' + '/Payroll-CRUD/employee.php'";
+        $script .= $_SESSION['status'] == "A" ?  "window.location.href = 'https://localhost' + window.location.pathname" : "window.location.href = 'https://localhost' + '/Payroll-CRUD/employee/employee.php'";
         $script .= "</script>";
 
         echo $script;
@@ -212,25 +212,6 @@ class Payroll
     }
     
 
-
-    // public function searchEmployees(){
-    // extract($_GET);
-    // $employees = array();
-    // $con = $this->connection("root", "");
-    // $con->select_db($this->DB_NAME);
-    // if($_SERVER['REQUEST_METHOD'] == "GET"){
-    //     if (isset($search)) {
-    //         $fetchEmployeesQuery = "SELECT employee.emp_id,employee.fullname, job.job_name FROM employee 
-    //         JOIN job    
-    //         ON employee.job_id = job.job_id
-    //         WHERE employee.fullname LIKE '%" . $search . "%'
-    //         ORDER BY employee.fullname ASC";
-            
-    //         $con->query($fetchEmployeesQuery);
-    //     }
-        
-    // }
-    // }
 
     public function fetchEmployee($emp_id)
     {
@@ -340,7 +321,7 @@ class Payroll
         $con->query($createTableSalaryQuery);
 
 
-        $createTablePayrollQuery = "CREATE TABLE payroll (
+        $createTablePayrollQuery = "CREATE TABLE payslip (
             payroll_id int PRIMARY KEY AUTO_INCREMENT,
             emp_id int, 
             job_id int,
@@ -382,6 +363,7 @@ class Payroll
             $insertDepartmentQuery = "INSERT INTO job (job_name, salary_range) VALUES ('$job[0]', '$job[1]')";
             if (!$con->query($insertDepartmentQuery) === TRUE) {
                 echo "$job[0] NOT INSERTED IN jobs";
+                exit;
             }
         }
 
@@ -572,7 +554,7 @@ class Payroll
         if($id){
         $con = $this->connection("root", "");
         $con->select_db("payroll_crud");
-        $query = "SELECT *, tax.sss + tax.pagibig + tax.philhealth AS 'Deduction' FROM payroll
+        $query = "SELECT *, tax.sss + tax.pagibig + tax.philhealth AS 'Deduction' FROM payslip
         JOIN job USING (job_id)
         JOIN employee USING(emp_id)
         JOIN salary USING (salary_id)

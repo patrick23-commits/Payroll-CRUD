@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once("./payroll.php");
+require_once("../payroll.php");
 if(isset($_GET['id']))
 $payslipInfo = $payroll->fetchEmployeePayslip($_GET['id']);
 else {
@@ -13,8 +13,8 @@ else {
 <head>
     <meta charset="utf-8/">
     <title>Payslip</title>
-    <link rel="stylesheet" href="./css/payslip.css">
-
+    <link rel="stylesheet" href="../css/payslip.css">
+    <link rel="shortcut icon" href="../assets/icon.png" type="image/x-icon">
 </head>
 <body>
     

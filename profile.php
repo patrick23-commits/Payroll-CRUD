@@ -1,11 +1,12 @@
 <?php
 session_start();
 require_once("./payroll.php");
-$GLOBALS['employee'] = $payroll->fetchEmployee($_GET['id']);
-if(!(isset($_SESSION['username']) && isset($_SESSION['password']))) {
-    header("location:login.php");
+if(isset($_SESSION['username'])==FALSE && isset($_SESSION['password'])==FALSE || $_SESSION['status']!="A") {
+    header("location:login-form.php");
 }
+$GLOBALS['employee'] = $payroll->fetchEmployee($_GET['id']);
 if(isset($_POST['logout'])) {
+   
     $payroll->logout();
 }
 if(isset($_POST['update'])) {
@@ -25,7 +26,7 @@ $tax = $payroll->fetchTax();
     <title>Profile</title>
 
     <link rel="shortcut icon" href="./assets/icon.png" type="image/x-icon">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./css/style.css">
 
     <!-- FontAwsome -->
     <script src="https://kit.fontawesome.com/e0c35786e8.js" crossorigin="anonymous"></script>
@@ -44,7 +45,7 @@ $tax = $payroll->fetchTax();
                     <button class="nav" id="btn-home">
                         <i class="fa-solid fa-house"></i> Home
                     </button>
-                    <form action="." method="post" style="display:inline;">
+                    <form method="post" style="display:inline;">
                         <button class="nav" id="btn-logout" name="logout">
                             <i class="fa-solid fa-right-from-bracket"></i> Logout
                         </button>

@@ -1,8 +1,8 @@
 <?php
 session_start();
-require_once("./payroll.php");
+require_once("../payroll.php");
 if (isset($_SESSION['username']) === FALSE && isset($_SESSION['password']) === FALSE || $_SESSION['status'] != "E") {
-  header("location:login-form.php");
+  header("location:../login-form.php");
 }
 
 ?>
@@ -13,7 +13,8 @@ if (isset($_SESSION['username']) === FALSE && isset($_SESSION['password']) === F
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./css/attendance.css" />
+    <link rel="stylesheet" href="../css/attendance.css" />
+    <link rel="shortcut icon" href="../assets/icon.png" type="image/x-icon">
     <!-- Font Awesome Cdn Link -->
     <link
       rel="stylesheet"
@@ -27,12 +28,12 @@ if (isset($_SESSION['username']) === FALSE && isset($_SESSION['password']) === F
         <ul>
           <li>
             <a href="#" class="logo">
-              <img src="./assets/icon.png" />
+              <img src="../assets/icon.png" />
               <span class="nav-item">Payroll System</span>
             </a>
           </li>
           <li>
-            <a href="employee.php">
+            <a href="./employee.php">
               <i class="fas fa-database"></i>
               <span class="nav-item">Payslip</span>
             </a>
@@ -44,7 +45,7 @@ if (isset($_SESSION['username']) === FALSE && isset($_SESSION['password']) === F
             </a>
           </li>
           <li>
-            <a href="./logout.php" id="bottom" class="logout">
+            <a href="../logout.php" id="bottom" class="logout">
               <i class="fas fa-sign-out-alt"></i>
               <span class="nav-item">Log Out</span>
             </a>

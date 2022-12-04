@@ -199,11 +199,12 @@ $(document).ready(()=>{
     $("#add_emp").on("submit", (e)=>{
         e.preventDefault()
         $.ajax({
-            url : "./addEmployee.php",
+            url : "./php/addEmployee.php",
             type : "POST",
             contentType : "application/x-www-form-urlencoded;charset=UTF-8",
             data : { fullname : $("#full-name").val(), bday : $("#bday").val() , gender : $("#gender").val(), department : $("#department").val()},
             success : (message)=>{
+                console.log(message)
                 let resp = JSON.parse(message)
                 let alertMessage = resp['message'];
                 let messageAction = alertMessage.substr(alertMessage.indexOf("added."))
@@ -227,7 +228,7 @@ $(document).ready(()=>{
         e.preventDefault()
         if($("#old-pass").val() && $("#new-pass").val()){
             $.ajax({
-                url : "./changeAccount.php",
+                url : "./php/changeAccount.php",
                 type : "POST",
                 contentType : "application/x-www-form-urlencoded;charset=UTF-8",
                 data : { old_pass : $("#old-pass").val(), new_pass : $("#new-pass").val()},
@@ -255,7 +256,7 @@ $(document).ready(()=>{
    function fetchNumberOfEmployee(){
   
     $.ajax({
-        url : "./fetchnumofemployee.php",
+        url : "./php/fetchnumofemployee.php",
         type : "GET",
         success : function(data) {
             let result = JSON.parse(data)
