@@ -42,10 +42,11 @@
 }
 .invoice-box table tr.heading td
 {
-    background: rgb(52, 193, 240);
+    background: black;
     font-weight: bold;
     cursor: pointer;
     transition: transform 0.5s, background 0.5s;
+    color: white;
 }
 .invoice-box table tr.details td
 {
