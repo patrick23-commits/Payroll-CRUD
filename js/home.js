@@ -80,7 +80,7 @@ $(document).ready(()=>{
     let account_hide = false;
 
     // Go to Dashboard
-    $("#btn-db").on("click", ()=>{
+    $(".btn-db").on("click", ()=>{
         window.location.href = "home.php#dashB";
         CloseLeftPanel();
         if(dashB_hide) $("#dashB-collapse").trigger("click");
@@ -162,7 +162,7 @@ $(document).ready(()=>{
 
     // // Update Date today
     // $("#date-today").html("Today is <p>" + months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear() +"</p>");
-
+    
     $("#date-today").simpleCalendar();
     
     $("#btn-refresh-tb").on("click", ()=>{ 

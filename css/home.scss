@@ -146,6 +146,26 @@ body{
                 border-radius: 10px;
                 color: white;
             }
+            .btn-db-prof{
+                @include flex-body(row, center, center);
+                gap: 10px;
+                padding: 10px 30px;
+                outline: none;
+                border: none;
+                border-radius: 10px;
+                color: white;
+                transition: 0.3s;
+                background: #3a72d3;
+                margin: 0 20px;
+            }
+            .btn-db-prof:hover,
+            .btn-db-prof:focus{
+                background: #4481eb;
+            }
+            .btn-db-prof:active{
+                background: #336dd3;
+            }
+
             .my-logo{
                 text-decoration: none;
                 @include flex-body(row, center, center);
@@ -543,6 +563,44 @@ body{
             }
         }
     }
+}
+
+#payroll-form{
+    input[type="text"], 
+    input[type="number"],
+    input[type="date"],
+    select{
+        background: transparent;
+        outline: none;
+        border: 0.2px solid rgba(0, 0, 0, .1);
+        padding: 2px 10px;
+        margin-bottom: 10px;
+    }
+
+    .btn-update,
+    #save{
+        padding: 10px 30px;
+        outline: none;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        transition: 0.3s;
+    }
+    .btn-update,
+    #save{
+        background-color: #58D68D;
+    }
+    .btn-update:hover,
+    .btn-update:focus,
+    #save:hover,
+    #save:focus{
+        background-color: #82E0AA;
+    }
+    .btn-update:active,
+    #save:active{
+        background-color: #2ECC71;
+    }
+
 }
 
 

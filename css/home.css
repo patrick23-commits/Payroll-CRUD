@@ -186,6 +186,29 @@ body {
   border-radius: 10px;
   color: white;
 }
+.container .panel-right .panel-right-header .btn-db-prof {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 10px;
+  padding: 10px 30px;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  transition: 0.3s;
+  background: #3a72d3;
+  margin: 0 20px;
+}
+.container .panel-right .panel-right-header .btn-db-prof:hover,
+.container .panel-right .panel-right-header .btn-db-prof:focus {
+  background: #4481eb;
+}
+.container .panel-right .panel-right-header .btn-db-prof:active {
+  background: #336dd3;
+}
 .container .panel-right .panel-right-header .my-logo {
   text-decoration: none;
   display: flex;
@@ -621,6 +644,40 @@ body {
 }
 #modal-add-emp .modal-content .modal-footer .btn.add:active {
   background: #2ECC71;
+}
+
+#payroll-form input[type=text],
+#payroll-form input[type=number],
+#payroll-form input[type=date],
+#payroll-form select {
+  background: transparent;
+  outline: none;
+  border: 0.2px solid rgba(0, 0, 0, 0.1);
+  padding: 2px 10px;
+  margin-bottom: 10px;
+}
+#payroll-form .btn-update,
+#payroll-form #save {
+  padding: 10px 30px;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  transition: 0.3s;
+}
+#payroll-form .btn-update,
+#payroll-form #save {
+  background-color: #58D68D;
+}
+#payroll-form .btn-update:hover,
+#payroll-form .btn-update:focus,
+#payroll-form #save:hover,
+#payroll-form #save:focus {
+  background-color: #82E0AA;
+}
+#payroll-form .btn-update:active,
+#payroll-form #save:active {
+  background-color: #2ECC71;
 }
 
 /* width */

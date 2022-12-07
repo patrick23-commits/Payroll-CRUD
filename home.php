@@ -66,7 +66,7 @@ $payroll->deleteEmployee();
                     </span>
                 </div>
                 <div class="panel-left-body">
-                    <button id="btn-db" title="Dashboard">
+                    <button class="btn-db" title="Dashboard">
                         <i class="fa-solid fa-border-all"></i>
                         <p>Dashboard</p>
                     </button>
@@ -112,11 +112,20 @@ $payroll->deleteEmployee();
                                 <div class="element-header" style="text-align: center;">
                                     <h1>Welcome!</h1>
                                 </div>
-                                <div class="element-body" style="max-width: 200px;">
-                                    <div>
-                                        Good day <b><?= $_SESSION['username']; ?></b>!
+                                <div class="element-body" style="max-width: 30ch;">
+                                    <div style="font-size: 20px;">
+                                         Good day <b><?= $_SESSION['username']; ?></b>!
                                     </div>
-                                    <div style="font-weight:bold;"> Quick Help </div>
+                                    <div style="display: flex; flex-direction: column;"> 
+                                        <span style="font-weight:bold;">
+                                            Quick Help 
+                                        </span>
+                                        <ol style="margin: 10px 20px;">
+                                            <li  style="text-align: justify;">Go to Dashboard to see total employee and the date today.</li>
+                                            <li  style="text-align: justify;">Go to Employee List to see all employee names. You can also add and remove employee here. </li>
+                                            <li  style="text-align: justify;">Go to My Account to change password.</li>
+                                        </ol>
+                                    </div>
                                 </div>
                             </div>
                             <div class="element dash-board">
@@ -128,8 +137,9 @@ $payroll->deleteEmployee();
                                 <div class="element-header">
                                     <h3>Employee per department</h3>
                                 </div>
-                                <div class="element-body" style="justify-content:center ;">
+                                <div class="element-body" style="flex-direction: column; justify-content:center; align-items: center;">
                                     <div id="chartContainer" style="height: 250px; width: 150px;"></div>
+                                    <div style="display: flex; gap: 10px;"><h4>Employee:</h4> <?php echo count($fetchEmployee["employees"]) ?></div>
                                 </div>
                             </div>
                         </div>
