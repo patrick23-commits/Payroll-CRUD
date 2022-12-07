@@ -88,7 +88,7 @@ class Payroll
         if(!$this->tablesCreated()){
             $this->createTables();
             echo "<script>
-                alert('Tables employee, salary, attendance, tax, job and payroll are successfully created!');
+                alert('Tables employee, salary, attendance, tax, job and payslip are successfully created!');
             </script>";
             $this->insertAdmin('admin', 'admin');
         }
@@ -562,7 +562,7 @@ class Payroll
         JOIN salary USING (salary_id)
         JOIN tax
         JOIN attendance USING (attendance_id)
-        WHERE payroll.emp_id = (SELECT emp_id from employee_account WHERE email = '$_SESSION[username]') AND payroll.payroll_id = $id";
+        WHERE payslip.emp_id = (SELECT emp_id from employee_account WHERE email = '$_SESSION[username]') AND payslip.payroll_id = $id";
 
         $result = $con->query($query)->fetch_assoc();
         $con->close();
