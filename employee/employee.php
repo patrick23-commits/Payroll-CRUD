@@ -18,7 +18,7 @@ if ( $_SESSION['status'] != "E") {
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
-    <title>Attendance</title>
+    <title>Employee</title>
   </head>
   <body>
     <div class="container">
