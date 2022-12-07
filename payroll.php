@@ -44,7 +44,7 @@ class Payroll
     }
     public function tablesCreated()
     {
-        $tables = ["job", "employee", "attendance", "tax", "salary", "payslip"];
+        $tables = ["job", "employee". "admin_account", "employee_account", "attendance", "tax", "salary", "payslip"];
         $count = 0;
         $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
