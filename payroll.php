@@ -77,6 +77,7 @@ class Payroll
         return $user ?  "<script>alert('CRUD CREATED SUCCESSFULY')</script>" : null;//"<script>alert('USER  CRUD IS ALREADY REGISTERED')</script>";
     }
 
+    //// FOR LOGIN 
     public function login($username, $password)
     {   
        
@@ -123,6 +124,9 @@ class Payroll
         $con->close();
     }
 
+
+
+    //// FOR LOGOUT 
     public function logout()
     {
         session_start();
@@ -130,6 +134,8 @@ class Payroll
         
         header("location:login-form.php");
     }
+
+    // FOR INSERTING EMPLOYEE
     public function addEmployee()
     {
         
@@ -212,7 +218,7 @@ class Payroll
     }
     
 
-
+    // TO FETCH SPECIFIC EMPLOYEE
     public function fetchEmployee($emp_id)
     {
         $con = $this->connection("root", "");
@@ -244,6 +250,8 @@ class Payroll
         }
     }
 
+
+    // FOR CREATING TABLES
     public function createTables()
     {
         $con = $this->connection("root", "");
@@ -344,6 +352,8 @@ class Payroll
         
     }
 
+
+    // FOR DEFAULT ADMIN ACCOUNT
     public function insertAdmin($uname, $pass) {
         $con = $this->connection("root", "");
         $con->select_db("payroll_crud");
@@ -396,6 +406,7 @@ class Payroll
         return $jobs;
     }
 
+    // FOR INSERTING PAYROLL
     public function insertPayroll()
     {
 
@@ -443,7 +454,7 @@ class Payroll
         }
         return $con->query($query)->num_rows ? array("from_" => $f, "to_" => $t) : FALSE;
     }
-
+    // FOR UPDATING EMPLOYEE INFO
     public function updateEmployee()
     {
         $emp_id = $_POST['emp_id'];
@@ -464,6 +475,8 @@ class Payroll
         $con->close();
     }
 
+
+    // FOR DELETING EMPLOYEE/EMPLOYEES
     public function deleteEmployee()
     {
         extract($_POST);

@@ -17,15 +17,15 @@ nav{
     bottom: 0;
     height: 100vh;
     left: 0;
-    width: 90px;
-    /* width: 280px; */
+    width: 85px;
     background: #6c80e3;
     overflow: hidden;
     transition: 1s;
 }
 nav:hover{
-    width: 280px;
+    width: 280px !important;
     transition: 1s;
+    overflow: visible;
 }
 .logo{
     text-align: center;
