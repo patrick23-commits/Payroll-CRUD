@@ -571,4 +571,9 @@ class Payroll
         header("Location:employee.php");
     }
 }
-$payroll = new Payroll();
+$payroll = new Payroll();     
+
+
+
+
+
