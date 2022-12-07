@@ -44,7 +44,7 @@ class Payroll
     }
     public function tablesCreated()
     {
-        $tables = ["job", "employee". "admin_account", "employee_account", "attendance", "tax", "salary", "payslip"];
+        $tables = ["job", "employee", "admin_account", "employee_account", "attendance", "tax", "salary", "payslip"];
         $count = 0;
         $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
@@ -363,7 +363,7 @@ class Payroll
             $insertDepartmentQuery = "INSERT INTO job (job_name, salary_range) VALUES ('$job[0]', '$job[1]')";
             if (!$con->query($insertDepartmentQuery) === TRUE) {
                 echo "$job[0] NOT INSERTED IN jobs";
-                exit;
+                //exit;
             }
         }
 
