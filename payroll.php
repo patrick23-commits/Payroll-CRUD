@@ -474,7 +474,7 @@ class Payroll
             $deleteEmployeeAccount = "DELETE FROM employee_account WHERE emp_id IN ($id)";
             $con->query($deleteEmployeeAccount);
 
-            $deletePayrollQuery = "DELETE FROM payroll WHERE emp_id IN ($id)";
+            $deletePayrollQuery = "DELETE FROM payslip WHERE emp_id IN ($id)";
             $con->query($deletePayrollQuery);
 
             $deleteAttendanceQuery = "DELETE FROM attendance WHERE emp_id IN ($id)";
