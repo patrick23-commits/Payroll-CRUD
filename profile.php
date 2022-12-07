@@ -89,7 +89,7 @@ $tax = $payroll->fetchTax();
                     <a href="home.php" class="my-logo" title="Payroll System">
                         <img src="./assets/icon.png" alt="" srcset="">
                     </a>
-                    <span id="page-title"> Good day, <?php echo $employee["fullname"] ?> </span>
+                    
                 </h1>
                 <span>
                     <button class="btn-db btn-db-prof" title="Dashboard">
