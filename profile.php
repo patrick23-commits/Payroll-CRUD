@@ -64,12 +64,22 @@ $tax = $payroll->fetchTax();
                             <div class="g-content">
                                 <div class="input-tag">
                                     <div class="input-tag-content">
+                                        <div class="input-label">Username</div>
+                                        <div class="input-value">
+                                            <input type="text" readonly placeholder="Username" value="<?= $employee['email'];?>" style="width:50px;"> 
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="input-tag">
+                                    <div class="input-tag-content">
                                         <div class="input-label">ID</div>
                                         <div class="input-value">
                                             <input type="text" readonly name="emp_id" placeholder="ID" value="<?= $employee['emp_id'];?>" style="width:50px;"> 
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="input-tag">
                                     <div class="input-tag-content">
                                         <div class="input-label">Name</div>

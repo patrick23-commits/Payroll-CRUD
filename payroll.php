@@ -218,11 +218,13 @@ class Payroll
         $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
         if (!$con->connect_error) {
-            $fetchEmployeeQuery = "SELECT employee.emp_id,employee.fullname, employee.date_of_birth, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),employee.date_of_birth)), '%Y') + 0 AS age,employee.gender,
+            $fetchEmployeeQuery = "SELECT employee_account.email, employee.emp_id,employee.fullname, employee.date_of_birth, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),employee.date_of_birth)), '%Y') + 0 AS age,employee.gender,
                                     job.job_name, job.salary_range
                                     FROM employee
                                     LEFT JOIN job
                                     ON employee.job_id = job.job_id
+                                    JOIN employee_account 
+                                    USING(emp_id)
                                     WHERE employee.emp_id = $emp_id";
             $result = $con->query($fetchEmployeeQuery);
             $con->close();
@@ -418,7 +420,7 @@ class Payroll
             $salary_id = $con->query($fetchSalaryIdQuery)->fetch_assoc();
 
 
-            $insertPayrollQuery = "INSERT INTO `payroll`(`emp_id`, `job_id`, `attendance_id`, `tax_id`, `salary_id`, `from_`, `to_`) VALUES ('$emp_id','$job_id[job_id]','$attendance_id[attendance_id]','1', '$salary_id[salary_id]',DATE('$_POST[from_]'),DATE('$_POST[to_]'))";
+            $insertPayrollQuery = "INSERT INTO `payslip`(`emp_id`, `job_id`, `attendance_id`, `tax_id`, `salary_id`, `from_`, `to_`) VALUES ('$emp_id','$job_id[job_id]','$attendance_id[attendance_id]','1', '$salary_id[salary_id]',DATE('$_POST[from_]'),DATE('$_POST[to_]'))";
             $con->query($insertPayrollQuery);
             if (!$con->error) echo "<script>alert('Payroll inserted')</script>";
         } else {
@@ -433,7 +435,7 @@ class Payroll
         $t = "";
         $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
-        $query = "SELECT * FROM payroll WHERE emp_id='$emp_id' AND (from_ BETWEEN DATE('$from_') AND DATE('$to_') OR to_ BETWEEN DATE('$from_') AND DATE('$to_'))";
+        $query = "SELECT * FROM payslip WHERE emp_id='$emp_id' AND (from_ BETWEEN DATE('$from_') AND DATE('$to_') OR to_ BETWEEN DATE('$from_') AND DATE('$to_'))";
         $result =  $con->query($query);
         while ($row = $result->fetch_assoc()) {
             $f = $row['from_'];
