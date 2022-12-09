@@ -59,7 +59,7 @@
     <div class="panels-container">
       <div class="panel left-panel">
         <div class="content">
-          <h3>Welcome to our Payroll System</h3>
+          <h3>CRUD Payroll System</h3>
           <img src="img/sign.svg" alt="" class="image">
         </div>
       </div>

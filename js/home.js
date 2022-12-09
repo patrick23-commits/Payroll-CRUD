@@ -204,7 +204,7 @@ $(document).ready(()=>{
             contentType : "application/x-www-form-urlencoded;charset=UTF-8",
             data : { fullname : $("#full-name").val(), bday : $("#bday").val() , gender : $("#gender").val(), department : $("#department").val()},
             success : (message)=>{
-                console.log(message)
+                // console.log(message)
                 let resp = JSON.parse(message)
                 let alertMessage = resp['message'];
                 let messageAction = alertMessage.substr(alertMessage.indexOf("added."))

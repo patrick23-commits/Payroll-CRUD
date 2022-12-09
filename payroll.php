@@ -140,7 +140,7 @@ class Payroll
     {
         
         extract($_POST);
-        $message = "";
+        $message = "Arjay";
         $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
         
@@ -153,19 +153,26 @@ class Payroll
         $id = $res->fetch_assoc()["auto_"];
         
         if (!$con->connect_error) {
-            $employee = "INSERT INTO employee (`fullname`, `date_of_birth`, `gender`, `job_id`) VALUES ('$fullname', '$bday', '$gender', $department)";
+            
+            $checkIfEmpExist = "SELECT * FROM employee where fullname ='$fullname' ";
+            $rowcount=$con->query($checkIfEmpExist)->num_rows;
+            if($rowcount == 0){
+                $employee = "INSERT INTO employee (`fullname`, `date_of_birth`, `gender`, `job_id`) VALUES ('$fullname', '$bday', '$gender', $department)";
             
             
-            $employeeAccount = "INSERT INTO employee_account (emp_id, email, password, status) 
-                                SELECT emp_id, CONCAT_WS('-', YEAR(NOW()), emp_id) AS email, 
-                                PASSWORD(CONCAT_WS('-', YEAR(NOW()), emp_id)) AS password, 
-                                'E' AS status 
-                                FROM employee WHERE emp_id = $id";
-
-            $message = ($con->query($employee) === TRUE) && ($con->query($employeeAccount)) ?  "$_POST[fullname] added." : "$_POST[fullname] is already exist.";
-
+                $employeeAccount = "INSERT INTO employee_account (emp_id, email, password, status) 
+                                    SELECT emp_id, CONCAT_WS('-', YEAR(NOW()), emp_id) AS email, 
+                                    PASSWORD(CONCAT_WS('-', YEAR(NOW()), emp_id)) AS password, 
+                                    'E' AS status 
+                                    FROM employee WHERE emp_id = $id";
+                $con->query($employee);
+                $con->query($employeeAccount);
+                
+            }
+            
         }
         $con->close();
+        $message = $rowcount == 0 ? $_POST['fullname']." added.": $_POST['fullname']." already exist.";
         return $message;
     }
 
