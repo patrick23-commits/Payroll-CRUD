@@ -79,11 +79,12 @@ $(document).ready(()=>{
             let setTo = new Date(to)
 
             let timeDiff = setTo.getTime() - setFrom.getTime();
-            let number_of_rest_day = Math.ceil(((timeDiff / (1000 * 3600 * 24)  + 1) / 15) * 2);
+            let number_of_rest_day = Math.floor(((timeDiff / (1000 * 3600 * 24)  + 1) / 15) * 2);
             number_of_rest_day == 5 ? number_of_rest_day -= 1 : null 
             let working_days = Math.ceil((timeDiff / (1000 * 3600 * 24)  + 1) - number_of_rest_day);
             console.log(Math.ceil((timeDiff / (1000 * 3600 * 24)  + 1)) + " " + number_of_rest_day)
-            if(working_days== 13 || working_days == 26 || working_days == 27) {
+            
+            if(working_days == 13 || working_days == 26 || working_days == 27) {
                 $("#working_days").text(working_days)
                 computeGrossPay(working_days)
             } else {
@@ -114,12 +115,14 @@ $(document).ready(()=>{
         total > 0 ? $("#net_pay").val(total) : $("#net_pay").val("");
     }
     function deduct_undertime(){
+        // Per hour
         let hourly_rate = parseInt($("#daily_rate").val()) / 8
         return  hourly_rate * parseInt($("#undertime").val()) ? hourly_rate * parseInt($("#undertime").val()) : 0;
     }
     function deduct_late() {
+        // Per minute 
         let hourly_rate = parseInt($("#daily_rate").val()) / 8
-        return  hourly_rate * parseInt($("#late").val()) ? hourly_rate * parseInt($("#late").val()): 0 ;
+        return hourly_rate * parseInt($("#late").val()) ?parseInt((hourly_rate / 60) * parseInt($("#late").val())): 0 ;
     }
 
     function computeDaysOfPresent() {
@@ -130,6 +133,7 @@ $(document).ready(()=>{
         return (parseInt($("#sss").val()) + parseInt($("#pagibig").val()) + parseInt($("#philhealth").val())) 
     }
     function computeOvertime() {
+        // Per hour
         let hourly_rate = parseInt($("#daily_rate").val()) / 8
         return hourly_rate * parseInt($("#overtime").val()) ?  hourly_rate * parseInt($("#overtime").val()) : 0;
     }

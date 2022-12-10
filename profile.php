@@ -150,8 +150,8 @@ $tax = $payroll->fetchTax();
                                         <label for="id-job-name">Job Department</label>
                                         <input type="text" name="job_name" tabindex="-1" readonly placeholder="Job Department" value="<?= $employee["job_name"]; ?>">
 
-                                        <label for="id-salary-range">Salary Range</label>
-                                        <input type="text" id="daily_rate" tabindex="-1" readonly placeholder="Salary Range" value="<?= $employee["salary_range"]; ?>">
+                                        <label for="id-salary-range">Daily Rate</label>
+                                        <input type="text" id="daily_rate" tabindex="-1" readonly placeholder="Salary Range" value="<?= $employee["daily_rate"]; ?>">
                                     </div>
                                 </div>
                             </div>
@@ -196,14 +196,14 @@ $tax = $payroll->fetchTax();
                                             <input type="text" disabled id="num_days_present" name="num_days_present" placeholder="Enter Days Present">
 
                                             <label for="id-salary-range">Overtime</label>
-                                            <input type="text" disabled id="overtime" name="overtime" placeholder="Enter Overtime">
+                                            <input type="text" disabled id="overtime" name="overtime" placeholder="Enter Overtime (per hour)">
                                         </div>
                                         <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-start;">
                                             <label for="id-salary-range">Undertime</label>
-                                            <input type="text" disabled id="undertime" name="undertime" placeholder="Enter Undertime">
+                                            <input type="text" disabled id="undertime" name="undertime" placeholder="Enter Undertime (per hour)">
 
                                             <label for="id-salary-range">Late</label>
-                                            <input type="text" disabled id="late" name="late" placeholder="Enter Late">
+                                            <input type="text" disabled id="late" name="late" placeholder="Enter Late (per minute)">
                                         </div>
                                     </div>
                                 </div>

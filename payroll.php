@@ -232,7 +232,7 @@ class Payroll
         $con->select_db($this->DB_NAME);
         if (!$con->connect_error) {
             $fetchEmployeeQuery = "SELECT employee_account.email, employee.emp_id,employee.fullname, employee.date_of_birth, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),employee.date_of_birth)), '%Y') + 0 AS age,employee.gender,
-                                    job.job_name, job.salary_range
+                                    job.job_name, job.daily_rate
                                     FROM employee
                                     LEFT JOIN job
                                     ON employee.job_id = job.job_id
@@ -274,7 +274,7 @@ class Payroll
         $createTableJobQuery = "CREATE TABLE job (
                                 job_id int PRIMARY KEY AUTO_INCREMENT,
                                 job_name varchar(25) UNIQUE,
-                                salary_range bigint
+                                daily_rate bigint
                             )";
 
         $con->query($createTableJobQuery);
@@ -375,11 +375,11 @@ class Payroll
     public function insertDepartmentAndDeduction()
     {
 
-        $jobs = array(array('Web Developer', 1000), array('Data Scientist', 1500), array('Mobile Developer', 1250), array('Penetration Tester', 1500), array('Game Developer', 1000));
+        $jobs = array(array('Web Developer', 1000), array('Data Scientist', 1500), array('Mobile Developer', 1000), array('Penetration Tester', 1000), array('Game Developer', 1500));
         $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
         foreach ($jobs as $job) {
-            $insertDepartmentQuery = "INSERT INTO job (job_name, salary_range) VALUES ('$job[0]', '$job[1]')";
+            $insertDepartmentQuery = "INSERT INTO job (job_name, daily_rate) VALUES ('$job[0]', '$job[1]')";
             if (!$con->query($insertDepartmentQuery) === TRUE) {
                 echo "$job[0] NOT INSERTED IN jobs";
                 //exit;
