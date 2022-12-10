@@ -65,17 +65,7 @@ class Payroll
         $this->login($this->username, $this->password);
     }
     
-    public function createUser()
-    {
-        
-        $con = $this->connection("root", "");
-        $con->select_db("mysql");
-        $createUserQuery = "CREATE USER 'crud'@'localhost' IDENTIFIED BY 'crud';";
-        $createUserQuery .= "GRANT ALL PRIVILEGES ON *.* TO 'crud'@'localhost' IDENTIFIED BY 'crud'";
-        $user = $con->multi_query($createUserQuery);
-        $con->close();
-        return $user ?  "<script>alert('CRUD CREATED SUCCESSFULY')</script>" : null;//"<script>alert('USER  CRUD IS ALREADY REGISTERED')</script>";
-    }
+
 
     //// FOR LOGIN 
     public function login($username, $password)
