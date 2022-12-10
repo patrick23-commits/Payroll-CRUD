@@ -13,7 +13,7 @@ if (isset($_POST['update'])) {
     $GLOBALS['employee'] = $payroll->fetchEmployee($_GET['id']);
 }
 $employee = $GLOBALS['employee'];
-$tax = $payroll->fetchTax();
+$tax = $payroll->fetchDeduction();
 ?>
 
 <!DOCTYPE html>
@@ -66,7 +66,7 @@ $tax = $payroll->fetchTax();
                         <i class="fa-solid fa-user"></i>
                         <p>Identification</p>
                     </button>
-                    <button id="btn-tax-attnd" title="Tax & Attendance" prof="<?= $_GET['id']; ?>">
+                    <button id="btn-tax-attnd" title="Deduction & Attendance" prof="<?= $_GET['id']; ?>">
                         <i class="fa-solid fa-chart-line"></i>
                         <p>Tax & Attendance</p>
                     </button>
@@ -116,7 +116,7 @@ $tax = $payroll->fetchTax();
                                             <input type="text" readonly placeholder="Username" value="<?= $employee['email']; ?>">
 
                                             <label for="id-id">ID</label>
-                                            <input type="text" readonly name="emp_id" placeholder="ID" value="<?= $employee['emp_id']; ?>">
+                                            <input type="text" id="emp_id" readonly name="emp_id" placeholder="ID" value="<?= $employee['emp_id']; ?>">
 
                                             <label for="id-fname">Full name</label>
                                             <input type="text" name="fullname" placeholder="Enter Full Name" value="<?= $employee['fullname']; ?>">
@@ -147,10 +147,10 @@ $tax = $payroll->fetchTax();
                                 </div>
                                 <div class="element-body" style="justify-content: center;">
                                     <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-start;">
-                                        <label for="id-job-name">Job Department</label>
-                                        <input type="text" name="job_name" tabindex="-1" readonly placeholder="Job Department" value="<?= $employee["job_name"]; ?>">
+                                        <label for="job-name">Job Department</label>
+                                        <input type="text" id="job_name" name="job_name" tabindex="-1" readonly placeholder="Job Department" value="<?= $employee["job_name"]; ?>">
 
-                                        <label for="id-salary-range">Daily Rate</label>
+                                        <label for="daily-rate">Daily Rate</label>
                                         <input type="text" id="daily_rate" tabindex="-1" readonly placeholder="Salary Range" value="<?= $employee["daily_rate"]; ?>">
                                     </div>
                                 </div>
@@ -159,12 +159,12 @@ $tax = $payroll->fetchTax();
                     </div>
                     <div class="block" id="tax-attnd">
                         <div class="block-title">
-                            <h2><i class="fa-solid fa-chart-line"></i> Tax and Attendance</h2>
+                            <h2><i class="fa-solid fa-chart-line"></i> Deduction and Attendance</h2>
                         </div>
                         <div class="block-body">
                             <div class="element">
                                 <div class="element-header" style="text-align: center;">
-                                    <h2> Tax </h2>
+                                    <h2> Deduction </h2>
                                 </div>
                                 <div class="element-body" style="justify-content: center;">
                                     <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-start;">
@@ -248,7 +248,7 @@ $tax = $payroll->fetchTax();
                     <div class="block">
                         <div class="block-body">
                             <div class="element" style="justify-content: center; align-items: center    ;">
-                                <button id="save" name="save"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                                <button type="button" id="save" name="save"><i class="fa-solid fa-floppy-disk"></i> Save</button>
                             </div>
                         </div>
                     </div>
@@ -260,8 +260,3 @@ $tax = $payroll->fetchTax();
 
 </html>
 
-<?php
-if(isset($_POST['save'])){
-    $payroll->insertPayroll();
-} 
-?> 

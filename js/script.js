@@ -99,20 +99,24 @@ $(document).ready(()=>{
         }
     }
 
+    function getDaysAbsent(working_days, num_days_present) {
+        return working_days - num_days_present
+
+    }
     function computeGrossPay(working_days) {
         let gross_salary = parseInt($("#daily_rate").val() * parseInt(working_days))
         $("#gross_pay").val(gross_salary);
     }
 
     function computeNetPay() {
+       
         let total = 0
         total = total + computeDaysOfPresent()
         total += computeOvertime()
         total = total - deduct_undertime()
         total = total- (deduct_late())
-        total = total - deductTaxes() 
-        console.log(total)
-        total > 0 ? $("#net_pay").val(total) : $("#net_pay").val("");
+        total = total - deductTaxes()
+        total > 0 ? $("#net_pay").val(total.toFixed(2)) : $("#net_pay").val("");
     }
     function deduct_undertime(){
         // Per hour
@@ -122,7 +126,7 @@ $(document).ready(()=>{
     function deduct_late() {
         // Per minute 
         let hourly_rate = parseInt($("#daily_rate").val()) / 8
-        return hourly_rate * parseInt($("#late").val()) ?parseInt((hourly_rate / 60) * parseInt($("#late").val())): 0 ;
+        return hourly_rate * ($("#late").val()) ?((hourly_rate / 60) * parseInt($("#late").val())): 0 ;
     }
 
     function computeDaysOfPresent() {
@@ -148,7 +152,27 @@ $(document).ready(()=>{
     $("#save").on("click",(e)=>{
         if(!$("#net_pay").val()){
             alert("Data is Not Complete")
-            e.preventDefault();
+        } else {
+            let late_amount = deduct_late()
+            let undertime_amount = deduct_undertime()
+            let overtime_amount = computeOvertime()
+            $.ajax({
+                url : "./php/insertPayroll.php",
+                type : "POST",
+                contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+                data : { gross_pay : $("#gross_pay").val(), net_pay : $("#net_pay").val(), job_name : $("#job_name").val(),
+                        from_: $("#from_").val(), to_:$("#to_").val(), emp_id : $("#emp_id").val(),
+                        num_days_present : $("#num_days_present").val(), late : $("#late").val(), undertime : $("#undertime").val(),
+                        overtime : $("#overtime").val(), late_amount : late_amount,
+                    undertime_amount : undertime_amount, overtime_amount : overtime_amount,
+                    absent :getDaysAbsent(parseInt($("#working_days").text()), parseInt($("#num_days_present").val()))},
+                success : (message)=>{
+                    let resp = JSON.parse(message)
+                    alert(resp['message'])
+                    window.location.reload()
+                    
+                }
+            })
         }
     })
 

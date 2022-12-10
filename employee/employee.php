@@ -68,8 +68,8 @@ if ( $_SESSION['status'] != "E") {
 
                           <tr>
                               <th><a href="./payslip.php?id=<?=$row[0];?>">Open</a></th>
-                              <th><?= $row[6] ;?></th>
-                              <th><?= $row[7] ;?></th>
+                              <th><?= $row[9] ;?></th>
+                              <th><?= $row[10] ;?></th>
                           </tr>
                           <?php
                               }

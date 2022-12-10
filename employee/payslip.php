@@ -75,13 +75,26 @@ else {
             </tr>
 
             <tr class="heading">
-                <td>Gross Pay</td>
+                <td>Earnings</td>
+                <td>-----</td>
+            </tr>
+            <tr class="details">
+                <td>Regular Day</td>
+                <td>Php <?=$payslipInfo['daily_rate'];?></td>
+            </tr>
+            <tr class="details">
+                <td>Overtime</td>
+                <td>Php <?=$payslipInfo['overtime_amount'];?></td>
+            </tr>
+            
+            <tr class="heading">
+                <td>Gross</td>
                 <td>-----</td>
             </tr>
 
             <tr class="details">
-                <td>Php</td>
-                <td><?=$payslipInfo['gross_pay'];?></td>
+                <td>Amount </td>
+                <td>Php <?=$payslipInfo['gross_pay'];?></td>
             </tr>
 
             <tr class="heading">
@@ -90,8 +103,8 @@ else {
             </tr>
 
             <tr class="details">
-                <td>Php</td>
-                <td><?=$payslipInfo['net_pay'];?></td>
+                <td>Amount</td>
+                <td>Php <?=$payslipInfo['net_pay'];?></td>
             </tr>
 
             <tr class="heading">
@@ -100,10 +113,38 @@ else {
             </tr>
 
             <tr class="details">
-                <td>Php</td>
-                <td><?=$payslipInfo['Deduction'];?></td>
+                <td>SSS</td>
+                <td>Php <?=$payslipInfo['sss'];?></td>
+            </tr>
+            <tr class="details">
+                <td>Pag-ibig</td>
+                <td>Php <?=$payslipInfo['pagibig'];?></td>
+            </tr>
+            <tr class="details">
+                <td>Philhealth</td>
+                <td>Php <?=$payslipInfo['philhealth'];?></td>
             </tr>
 
+            <tr class="heading">
+                <td>Others</td>
+                <td>-----</td>
+            </tr>
+            <tr class="details">
+                <td>Late</td>
+                <td>Php <?=$payslipInfo['late_amount'];?></td>
+            </tr>
+            <tr class="details">
+                <td>Undertime</td>
+                <td>Php <?=$payslipInfo['undertime_amount'];?></td>
+            </tr>
+            <tr class="heading">
+                <td>Total Deduction</td>
+                <td>-----</td>
+            </tr>
+            <tr class="details">
+                <td>Total</td>
+                <td>Php <?=$payslipInfo['Deduction'];?></td>
+            </tr>
             <tr class="footer">
                 <td>Thank you for the great effort this month!!!</td>
                 <tr class="terms">

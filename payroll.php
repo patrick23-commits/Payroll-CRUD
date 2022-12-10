@@ -44,7 +44,7 @@ class Payroll
     }
     public function tablesCreated()
     {
-        $tables = ["job", "employee", "admin_account", "employee_account", "attendance", "tax", "salary", "payslip"];
+        $tables = ["job", "employee", "admin_account", "employee_account", "attendance", "deduction", "salary", "payslip"];
         $count = 0;
         $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
@@ -245,13 +245,13 @@ class Payroll
         }
     }
 
-    public function fetchTax()
+    public function fetchDeduction()
     {
         $con = $this->connection("root","");
         $con->select_db($this->DB_NAME);
         if (!$con->connect_error) {
-            $fetchTaxQuery = "SELECT * FROM tax";
-            $result = $con->query($fetchTaxQuery);
+            $fetchDeductionQuery = "SELECT * FROM deduction";
+            $result = $con->query($fetchDeductionQuery);
             $con->close();
             return $result->fetch_array();
         }
@@ -274,7 +274,7 @@ class Payroll
         $createTableJobQuery = "CREATE TABLE job (
                                 job_id int PRIMARY KEY AUTO_INCREMENT,
                                 job_name varchar(25) UNIQUE,
-                                daily_rate bigint
+                                daily_rate float(23,2)
                             )";
 
         $con->query($createTableJobQuery);
@@ -307,6 +307,7 @@ class Payroll
             attendance_id int PRIMARY KEY AUTO_INCREMENT,
             emp_id int NOT NULL,
             num_of_days_present int,
+            absent int,
             late int,
             undertime int,
             overtime int,
@@ -316,11 +317,11 @@ class Payroll
         );";
         $con->query($createTableAttendanceQuery);
 
-        $createTableTaxQuery = "CREATE TABLE tax(
-            tax_id int PRIMARY KEY AUTO_INCREMENT,
-            sss int NOT NULL, 
-            pagibig int NOT NULL,
-            philhealth int NOT NULL
+        $createTableTaxQuery = "CREATE TABLE deduction(
+            deduction_id int PRIMARY KEY AUTO_INCREMENT,
+            sss float(23, 2) NOT NULL, 
+            pagibig float(23, 2) NOT NULL,
+            philhealth float(23, 2) NOT NULL
         );";
         $con->query($createTableTaxQuery);
 
@@ -328,8 +329,8 @@ class Payroll
             salary_id int PRIMARY KEY AUTO_INCREMENT,
             emp_id int,
             job_id int,
-            gross_pay bigint,
-            net_pay bigint,
+            gross_pay float(23, 2),
+            net_pay float(23,2),
             from_ Date,
             to_ Date,
             FOREIGN KEY (emp_id) REFERENCES employee(emp_id),
@@ -343,14 +344,17 @@ class Payroll
             emp_id int, 
             job_id int,
             attendance_id int,
-            tax_id int, 
+            deduction_id int, 
             salary_id int, 
+            late_amount float(23,2),
+            undertime_amount float(23,2),
+            overtime_amount float(23,2),
             from_ Date,
             to_ Date,
             FOREIGN KEY(emp_id) REFERENCES employee(emp_id),
             FOREIGN KEY(job_id) REFERENCES job(job_id),
             FOREIGN KEY(attendance_id) REFERENCES attendance(attendance_id),
-            FOREIGN KEY(tax_id) REFERENCES tax(tax_id),
+            FOREIGN KEY(deduction_id) REFERENCES deduction(deduction_id),
             FOREIGN KEY(salary_id) REFERENCES salary(salary_id)
         )";
         $con->query($createTablePayrollQuery);
@@ -386,12 +390,12 @@ class Payroll
             }
         }
 
-        // CHECK TAX IF NO DATA
-        $taxSelectQuery = "SELECT * FROM tax";
+        // CHECK DEDUCTION IF NO DATA
+        $taxSelectQuery = "SELECT * FROM deduction";
         if ($con->query($taxSelectQuery)->num_rows == 0) {
-            $tax = array("sss" => 100, "pagibig" => 100, "philhealth" => 150);
-            $insertTaxQuery = "INSERT INTO tax (sss, pagibig, philhealth) VALUES ('$tax[sss]', '$tax[pagibig]', '$tax[philhealth]')";
-            if ($con->query($insertTaxQuery) === FALSE) {
+            $deductions = array("sss" => 100, "pagibig" => 100, "philhealth" => 150);
+            $insertDeductionQuery = "INSERT INTO deduction (sss, pagibig, philhealth) VALUES ('$deductions[sss]', '$deductions[pagibig]', '$deductions[philhealth]')";
+            if ($con->query($insertDeductionQuery) === FALSE) {
                 echo ("ERROR" . $con->error);
             }
         }
@@ -416,13 +420,13 @@ class Payroll
     // FOR INSERTING PAYROLL
     public function insertPayroll()
     {
-
+        
         $con = $this->connection("root", "");
         $con->select_db($this->DB_NAME);
         $emp_id = $_POST['emp_id'];
         $doesHaveExistingPayroll = $this->doesHaveExistingPayroll($emp_id, $_POST['from_'], $_POST['to_']);
         if (!$doesHaveExistingPayroll) {
-            $insertAttendanceQuery = "INSERT INTO attendance (emp_id, num_of_days_present,late,undertime,overtime, from_, to_) VALUES ('$emp_id', '$_POST[num_days_present]', '$_POST[late]', '$_POST[undertime]','$_POST[overtime]',DATE('$_POST[from_]'),DATE('$_POST[to_]'))";
+            $insertAttendanceQuery = "INSERT INTO attendance (emp_id, num_of_days_present,absent,late,undertime,overtime, from_, to_) VALUES ('$emp_id', '$_POST[num_days_present]','$_POST[absent]', '$_POST[late]', '$_POST[undertime]','$_POST[overtime]',DATE('$_POST[from_]'),DATE('$_POST[to_]'))";
             $con->query($insertAttendanceQuery);
 
             $fetchJobIdQuery = "SELECT job_id from job WHERE job_name = '$_POST[job_name]'";
@@ -438,11 +442,11 @@ class Payroll
             $salary_id = $con->query($fetchSalaryIdQuery)->fetch_assoc();
 
 
-            $insertPayrollQuery = "INSERT INTO `payslip`(`emp_id`, `job_id`, `attendance_id`, `tax_id`, `salary_id`, `from_`, `to_`) VALUES ('$emp_id','$job_id[job_id]','$attendance_id[attendance_id]','1', '$salary_id[salary_id]',DATE('$_POST[from_]'),DATE('$_POST[to_]'))";
+            $insertPayrollQuery = "INSERT INTO `payslip`(`emp_id`, `job_id`, `attendance_id`, `deduction_id`, `salary_id`,`late_amount`,`undertime_amount`,`overtime_amount`, `from_`, `to_`) VALUES ('$emp_id','$job_id[job_id]','$attendance_id[attendance_id]','1', '$salary_id[salary_id]', $_POST[late_amount], $_POST[undertime_amount], $_POST[overtime_amount],DATE('$_POST[from_]'),DATE('$_POST[to_]'))";
             $con->query($insertPayrollQuery);
-            if (!$con->error) echo "<script>alert('Payroll inserted')</script>";
+            return (!$con->error) ? "Payroll inserted" : "Error";
         } else {
-            echo "<script>alert('Employee Does have existing payroll for DATE " . $doesHaveExistingPayroll['from_'] . " to " . $doesHaveExistingPayroll['to_'] . "!!')</script>";
+            return "Employee Does have existing payroll for DATE " . $doesHaveExistingPayroll['from_'] . " to " . $doesHaveExistingPayroll['to_'] . "!!";
         }
         $con->close();
     }
@@ -576,11 +580,11 @@ class Payroll
         if($id){
         $con = $this->connection("root", "");
         $con->select_db("payroll_crud");
-        $query = "SELECT *, tax.sss + tax.pagibig + tax.philhealth AS 'Deduction' FROM payslip
+        $query = "SELECT *, deduction.sss + deduction.pagibig + deduction.philhealth + late_amount + undertime_amount AS 'Deduction' FROM payslip
         JOIN job USING (job_id)
         JOIN employee USING(emp_id)
         JOIN salary USING (salary_id)
-        JOIN tax
+        JOIN deduction
         JOIN attendance USING (attendance_id)
         WHERE payslip.emp_id = (SELECT emp_id from employee_account WHERE email = '$_SESSION[username]') AND payslip.payroll_id = $id";
 

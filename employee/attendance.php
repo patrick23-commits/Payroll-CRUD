@@ -60,6 +60,7 @@ if (isset($_SESSION['username']) === FALSE && isset($_SESSION['password']) === F
                         <tr>
                             <th>FROM</th>
                             <th>TO</th>
+                            <th>ABSENT</th>
                             <th>LATE</th>
                             <th>UNDERTIME</th>
                             <th>OVERTIME</th>
@@ -70,11 +71,12 @@ if (isset($_SESSION['username']) === FALSE && isset($_SESSION['password']) === F
                             foreach($payroll->fetchAllPayslipsOrAttendance("attendance") as $row){
                           ?>
                         <tr>   
-                            <td><?= $row[6] ;?></td>    
-                            <td><?= $row[7] ;?></td>
-                            <td><?= $row[3] ;?> Hours</td>
-                            <td><?= $row[4] ;?> Hours</td>
+                            <td><?= $row[7] ;?></td>    
+                            <td><?= $row[8] ;?></td>
+                            <td><?= $row[3] ;?></td>
+                            <td><?= $row[4] ;?> Minutes</td>
                             <td><?= $row[5] ;?> Hours</td>
+                            <td><?= $row[6] ;?> Hours</td>
                         </tr>
                           <?php
                             }
