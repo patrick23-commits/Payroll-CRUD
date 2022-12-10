@@ -75,6 +75,21 @@ $(document).ready(()=>{
     })
 
 
+    
+    $(".btn-remove-emp").on("click", (e)=>{
+        let submit = false;
+        $(".cb-index").each((index)=>{
+            if($('.cb-index')[index].checked) {
+                submit = true 
+                return false
+            }
+        })
+        if(submit == false) { // If admin did not checked any employee to delete 
+            e.preventDefault()
+        } 
+    }) 
+
+
     let dashB_hide = false;
     let allEmployee_hide = false;
     let account_hide = false;

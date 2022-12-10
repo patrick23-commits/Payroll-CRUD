@@ -186,7 +186,7 @@ $payroll->deleteEmployee();
                                                         ?>
                                                         <div class="emp">
                                                             <div class="check-box">
-                                                                <input type="checkbox" name="emp_id[]" class="cb-index" value="<?= $emp['emp_id']; ?>">
+                                                                <input type="checkbox" name="emp_id[]" class="cb-index"  value="<?= $emp['emp_id']; ?>">
                                                             </div>
                                                             <a href="./profile.php?id=<?= $emp['emp_id']; ?>" style="--col:<?= $cjobs[$emp['job_name']]; ?>" fl="<?= strtoupper($emp['fullname'][0]); ?>">
                                                                 <div class="name">
@@ -310,3 +310,4 @@ $payroll->deleteEmployee();
 </body>
 
 </html>
+<script>
