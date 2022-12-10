@@ -89,7 +89,7 @@ class Payroll
         if(!$this->tablesCreated()){
             $this->createTables();
             echo "<script>
-                alert('Tables employee, salary, attendance, tax, job and payslip are successfully created!');
+                alert('Tables employee, salary, attendance, deduction, job and payslip are successfully created!');
             </script>";
             $this->insertAdmin('admin', 'admin');
         }
